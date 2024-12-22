@@ -10,3 +10,11 @@ export interface CreateAccountFormData {
 }
 
 export type FormErrors = Partial<Record<keyof CreateAccountFormData, string>>;
+
+export interface FormState {
+  formData: CreateAccountFormData;
+  errors: FormErrors;
+  isLoading: boolean;
+  successMessage: string | null;
+  errorMessage: string | null;
+}
