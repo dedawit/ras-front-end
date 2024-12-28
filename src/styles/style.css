@@ -32,3 +32,7 @@ body {
 .underline {
   text-decoration: underline !important;
 }
+
+.custom-underline {
+  text-underline-offset: 4px;
+}
