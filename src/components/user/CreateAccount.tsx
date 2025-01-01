@@ -10,6 +10,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { Spinner } from "../ui/Spinner";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "../common/Logo";
 
 export const CreateAccountForm: React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
@@ -106,107 +107,112 @@ export const CreateAccountForm: React.FC = () => {
 
   return (
     <div>
-      {notification && (
-        <Notification
-          type={notification.type}
-          message={notification.message}
-          onClose={hideNotification}
-        />
-      )}
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-4 p-8 border rounded-lg shadow-lg max-w-2xl mx-auto bg-transparent mt-20"
-      >
-        <h2 className="text-2xl font-bold text-center primary-color mb-8">
-          Create Account
-        </h2>
-
-        <InputField
-          label="Email"
-          type="text"
-          value={formData.email}
-          onChange={(value) => updateField("email", value)}
-          error={errors.email}
-          required
-        />
-        <PasswordField
-          label="Password"
-          value={formData.password}
-          onChange={(value) => updateField("password", value)}
-          error={errors.password}
-          required
-        />
-        <PasswordField
-          label="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={(value) => updateField("confirmPassword", value)}
-          error={errors.confirmPassword}
-          required
-        />
-        <InputField
-          label="Company Name"
-          value={formData.companyName}
-          onChange={(value) => updateField("companyName", value)}
-          error={errors.companyName}
-          required
-        />
-        <InputField
-          label="First Name"
-          value={formData.firstName}
-          onChange={(value) => updateField("firstName", value)}
-          error={errors.firstName}
-          required
-        />
-        <InputField
-          label="Last Name"
-          value={formData.lastName}
-          onChange={(value) => updateField("lastName", value)}
-          error={errors.lastName}
-          required
-        />
-        <InputField
-          label="Phone Number"
-          type="tel"
-          value={formData.telephone}
-          onChange={(value) => updateField("telephone", value)}
-          error={errors.telephone}
-          required
-        />
-        <SelectField
-          label="Role"
-          value={formData.lastRole}
-          onChange={(value) => updateField("lastRole", value)}
-          options={[
-            { value: "buyer", label: "Buyer" },
-            { value: "seller", label: "Seller" },
-          ]}
-          required
-        />
-
-        <button
-          type="submit"
-          className="w-full primary-color-bg text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-          disabled={isLoading}
+      <div className="container">
+        <Logo />
+      </div>
+      <div className="my-4">
+        {notification && (
+          <Notification
+            type={notification.type}
+            message={notification.message}
+            onClose={hideNotification}
+          />
+        )}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 p-8 border rounded-lg shadow-lg max-w-2xl mx-auto bg-transparent mt-20"
         >
-          {isLoading ? (
-            <div className="flex justify-center items-center">
-              <Spinner /> {/* Show spinner while loading */}
-              <span className="ml-2">Creating Account...</span>
-            </div>
-          ) : (
-            "Create Account"
-          )}
-        </button>
-        <p className="text-center text-sm primary-color">
-          Already have an account?{" "}
-          <a
-            href="/login"
-            className="primary-color underline hover:text-blue-700"
+          <h2 className="text-2xl font-bold text-center primary-color mb-8">
+            Create Account
+          </h2>
+
+          <InputField
+            label="Email"
+            type="text"
+            value={formData.email}
+            onChange={(value) => updateField("email", value)}
+            error={errors.email}
+            required
+          />
+          <PasswordField
+            label="Password"
+            value={formData.password}
+            onChange={(value) => updateField("password", value)}
+            error={errors.password}
+            required
+          />
+          <PasswordField
+            label="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={(value) => updateField("confirmPassword", value)}
+            error={errors.confirmPassword}
+            required
+          />
+          <InputField
+            label="Company Name"
+            value={formData.companyName}
+            onChange={(value) => updateField("companyName", value)}
+            error={errors.companyName}
+            required
+          />
+          <InputField
+            label="First Name"
+            value={formData.firstName}
+            onChange={(value) => updateField("firstName", value)}
+            error={errors.firstName}
+            required
+          />
+          <InputField
+            label="Last Name"
+            value={formData.lastName}
+            onChange={(value) => updateField("lastName", value)}
+            error={errors.lastName}
+            required
+          />
+          <InputField
+            label="Phone Number"
+            type="tel"
+            value={formData.telephone}
+            onChange={(value) => updateField("telephone", value)}
+            error={errors.telephone}
+            required
+          />
+          <SelectField
+            label="Role"
+            value={formData.lastRole}
+            onChange={(value) => updateField("lastRole", value)}
+            options={[
+              { value: "buyer", label: "Buyer" },
+              { value: "seller", label: "Seller" },
+            ]}
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full primary-color-bg text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
+            disabled={isLoading}
           >
-            Login
-          </a>
-        </p>
-      </form>
+            {isLoading ? (
+              <div className="flex justify-center items-center">
+                <Spinner /> {/* Show spinner while loading */}
+                <span className="ml-2">Creating Account...</span>
+              </div>
+            ) : (
+              "Create Account"
+            )}
+          </button>
+          <p className="text-center text-sm primary-color">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="primary-color underline hover:text-blue-700"
+            >
+              Login
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

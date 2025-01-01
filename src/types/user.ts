@@ -18,3 +18,10 @@ export interface FormState {
   successMessage: string | null;
   errorMessage: string | null;
 }
+
+export interface User {
+  name: string;
+  avatar: string;
+}
+
+export type UserMode = "buyer" | "seller";

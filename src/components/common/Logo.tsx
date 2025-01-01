@@ -4,7 +4,7 @@ export const Logo: React.FC = () => {
   return (
     <div className="position-fixed top-0 start-0 p-2 bg-brand d-flex w-full">
       <img
-        src="/icons/building.png"
+        src="/icons/logo.svg"
         alt="Building Icon"
         width="50"
         height="auto"
