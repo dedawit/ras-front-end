@@ -4,21 +4,21 @@ import "./styles/style.css";
 import { LoginForm } from "./components/auth/LoginForm";
 import { CreateAccountForm } from "./components/user/CreateAccount";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Sidebar from "./components/ui/SideBar";
+import Header from "./components/ui/Header";
+import RFQList from "./components/rfq/RFQList";
+import { BuyerRFQForm } from "./components/rfq/BuyerRFQForm";
 function App() {
   return (
     <Router>
-      <div className="container">
-        <Logo />
-      </div>
-
       {/* Routing logic */}
-      <div className="my-4">
-        <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          {/* Default route */}
-          <Route path="/" element={<CreateAccountForm />} />
-        </Routes>
-      </div>
+
+      <Routes>
+        <Route path="/login" element={<LoginForm />} />
+
+        <Route path="/" element={<CreateAccountForm />} />
+        <Route path="/rfqs" element={<BuyerRFQForm />} />
+      </Routes>
     </Router>
   );
 }

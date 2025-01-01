@@ -36,3 +36,19 @@ body {
 .custom-underline {
   text-underline-offset: 4px;
 }
+
+.group-hover\:primary-color:hover {
+  color: #3246d3; /* Matches primary color */
+}
+
+.hover\:bg-white:hover {
+  background-color: #ffffff;
+}
+
+.transition-colors {
+  transition: all 0.3s ease-in-out;
+}
+
+.group-hover\:scale-110:hover img {
+  transform: scale(1.1);
+}
