@@ -1,15 +1,14 @@
 import { FC } from "react";
-import { Button } from "./button";
+import { Button } from "./Button";
 import SearchBar from "./SearchBar";
-import CategorySelect from "./CategoySelect";
+import CategorySelect from "./CategorySelect";
 
 const Header: FC = () => {
   return (
-    <div className="bg-transparent border-b p-4">
-      <div className="flex items-center space-x-4">
+    <div className="bg-transparent p-4 w-full large-header">
+      <div className="flex items-center space-x-4 w-full">
         <CategorySelect />
         <SearchBar />
-        <Button variant="primary">Post RFQ</Button>
       </div>
     </div>
   );

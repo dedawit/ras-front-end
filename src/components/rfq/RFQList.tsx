@@ -1,6 +1,6 @@
 import { FC } from "react";
 import RFQCard from "./RFQCard";
-import { RFQ } from "@/types";
+import { RFQ } from "../../types/rfq";
 
 const mockRFQs: RFQ[] = [
   {
