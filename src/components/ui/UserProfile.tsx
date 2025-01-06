@@ -17,7 +17,7 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
         <button className="primary-color text-sm  my-2 flex items-center">
           My Account{" "}
           <span className="ms-2">
-            <img src="icons/triangle.svg" className="w-4 h-4" />
+            <img src="/icons/triangle.svg" className="w-4 h-4" />
           </span>
         </button>
       </div>

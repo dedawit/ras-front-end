@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { Button } from "./Button";
 
@@ -17,17 +17,37 @@ const categories = [
 ];
 
 interface CategorySelectProps {
-  width?: string; // Optional prop to customize width
+  width?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  excludeAllCategories?: boolean;
 }
 
-const CategorySelect: FC<CategorySelectProps> = ({ width = "w-96" }) => {
+const CategorySelect: FC<CategorySelectProps> = ({
+  width = "w-96",
+  value,
+  onChange,
+  excludeAllCategories = false,
+}) => {
+  // Avoid selecting "All Categories" by default if excludeAllCategories is true
+  const defaultCategory = excludeAllCategories ? categories[1] : categories[0];
   const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0]
+    value || defaultCategory
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
+  // Sync controlled value if `value` prop changes
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedCategory(value);
+    }
+  }, [value]);
+
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category);
+    if (onChange) {
+      onChange(category); // Call onChange if provided
+    }
     setIsDropdownOpen(false); // Close dropdown after selecting a category
   };
 
@@ -35,12 +55,18 @@ const CategorySelect: FC<CategorySelectProps> = ({ width = "w-96" }) => {
     setIsDropdownOpen((prev) => !prev); // Toggle the dropdown open/close
   };
 
+  // Filter categories based on excludeAllCategories prop
+  const filteredCategories = excludeAllCategories
+    ? categories.filter((category) => category !== "All Categories")
+    : categories;
+
   return (
     <div className={`relative ${width}`}>
       <Button
         variant="outline"
+        type="button"
         className="flex items-center space-x-2 w-full border-select-color text-select-color text-left overflow-hidden text-ellipsis whitespace-nowrap"
-        onClick={toggleDropdown} // Toggle dropdown when clicking button
+        onClick={toggleDropdown}
       >
         <span className="flex-grow">{selectedCategory}</span>
         <RiArrowDownSLine className="w-5 h-5 text-select-color ml-2" />
@@ -48,17 +74,15 @@ const CategorySelect: FC<CategorySelectProps> = ({ width = "w-96" }) => {
       {/* Dropdown menu */}
       {isDropdownOpen && (
         <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
-          {categories
-            .filter((category) => category !== selectedCategory) // Hide selected category
-            .map((category) => (
-              <button
-                key={category}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                onClick={() => handleCategorySelect(category)}
-              >
-                {category}
-              </button>
-            ))}
+          {filteredCategories.map((category) => (
+            <button
+              key={category}
+              className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              onClick={() => handleCategorySelect(category)}
+            >
+              {category}
+            </button>
+          ))}
         </div>
       )}
     </div>

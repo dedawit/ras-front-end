@@ -8,6 +8,7 @@ import Sidebar from "./components/ui/SideBar";
 import Header from "./components/ui/Header";
 import RFQList from "./components/rfq/RFQList";
 import { BuyerRFQForm } from "./components/rfq/BuyerRFQForm";
+import PostRFQ from "./components/rfq/PostRFQForm";
 function App() {
   return (
     <Router>
@@ -18,6 +19,7 @@ function App() {
 
         <Route path="/" element={<CreateAccountForm />} />
         <Route path="/rfqs" element={<BuyerRFQForm />} />
+        <Route path="/rfqs/post-rfq" element={<PostRFQ />} />
       </Routes>
     </Router>
   );

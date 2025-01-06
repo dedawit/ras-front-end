@@ -9,7 +9,6 @@ const mockRFQs: RFQ[] = [
     quantity: 150,
     date: "2024-11-26",
     category: "Electronics and Electrical Equipment",
-    quotes: 99,
   },
   {
     id: "2",
@@ -17,7 +16,6 @@ const mockRFQs: RFQ[] = [
     quantity: 2900,
     date: "2024-10-26",
     category: "Agriculture and Food Products",
-    quotes: 99,
   },
 ];
 

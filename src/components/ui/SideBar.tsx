@@ -34,7 +34,7 @@ const sidebarLinks: SidebarLink[] = [
 
 const mockUser = {
   name: "Fasika Ewnetu",
-  avatar: "place_holder/fasika.jpg",
+  avatar: "/place_holder/fasika.jpg",
 };
 
 const Sidebar: FC = () => {
@@ -50,7 +50,7 @@ const Sidebar: FC = () => {
       <nav className="space-y-2">
         {sidebarLinks.map((link) => {
           const isActive =
-            location.pathname === link.href ||
+            location.pathname.startsWith(link.href) ||
             (location.pathname === "/" && link.href === "/rfqs");
           const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 

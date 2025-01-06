@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Button2 from "../ui/Button2";
 import CategorySelect from "../ui/CategorySelect";
 import Header from "../ui/Header";
@@ -6,6 +7,11 @@ import Sidebar from "../ui/SideBar";
 import RFQList from "./RFQList";
 
 export const BuyerRFQForm: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handlePostRFQ = () => {
+    navigate("/rfqs/post-rfq");
+  };
   return (
     <div className="flex h-screen bg-transparent">
       <Sidebar />
@@ -19,14 +25,14 @@ export const BuyerRFQForm: React.FC = () => {
           <Button2
             icon={"icons/plus.svg"}
             text="Post RFQ"
-            onClick={() => alert("Button clicked!")}
+            onClick={handlePostRFQ}
           />
         </div>
         <div className="px-4 mt-4 mobile-header">
           <Button2
             icon={"icons/plus.svg"}
             text="Post RFQ"
-            onClick={() => alert("Button clicked!")}
+            onClick={handlePostRFQ}
             width="w-full"
           />
         </div>

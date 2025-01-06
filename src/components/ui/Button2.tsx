@@ -7,6 +7,8 @@ interface ButtonProps {
   onClick?: () => void; // Optional click handler
   width?: string; // Optional width for flexibility
   className?: string; // Optional custom className prop
+  iconClassName?: string;
+  textClassName?: string;
 }
 
 const Button2: FC<ButtonProps> = ({
@@ -15,6 +17,8 @@ const Button2: FC<ButtonProps> = ({
   onClick,
   width = "w-auto",
   className = "", // Default to an empty string
+  iconClassName = "w-6 h-6",
+  textClassName = "",
 }) => {
   return (
     <button
@@ -25,10 +29,10 @@ const Button2: FC<ButtonProps> = ({
         <img
           src={icon}
           alt="icon"
-          className="w-6 h-6" // Icon size
+          className={` ${iconClassName} `} // Icon size
         />
       )}
-      <span className="">{text}</span>
+      <span className={`${textClassName}`}>{text}</span>
     </button>
   );
 };

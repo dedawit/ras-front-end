@@ -6,11 +6,11 @@ export const LogoInside: React.FC = () => {
       <img
         src="/icons/logo.svg"
         alt="Building Icon"
-        width="50"
+        className="sm:w-10 sm:h-10 w-5 h-5"
         height="auto"
         style={{ objectFit: "contain" }}
       />
-      <span className="text-dark text-xl font-bold ms-2">
+      <span className="text-dark  font-bold ms-2 sm:text-lg  text-xs">
         TradeBrigeSolutions
       </span>
     </div>

@@ -106,7 +106,7 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
         })}
       </nav>
 
-      <div className="flex flex-col justify-between mt-20 mb-10 w-full ">
+      <div className="flex flex-col justify-between mt-10 mb-10 w-full ">
         <Mode />
         <UserProfile user={mockUser} />
         <button className="rounded-md mx-2 px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold ">

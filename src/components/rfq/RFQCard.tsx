@@ -18,18 +18,21 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
           <Button2
             icon={"icons/eye.svg"}
             text="View"
+            textClassName="sm:block hidden"
             width="200px"
             onClick={() => alert("Button clicked!")}
           />
           <Button2
             icon={"icons/edit.svg"}
             text="Edit"
+            textClassName="sm:block hidden"
             width="200px"
             onClick={() => alert("Button clicked!")}
           />
           <Button2
             icon={"icons/quote.svg"}
             text="View Quotes"
+            textClassName="sm:block hidden"
             width="200px"
             onClick={() => alert("Button clicked!")}
           />
@@ -40,21 +43,21 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
       <div className="flex items-center justify-between">
         {/* Left: Quantity and Date */}
         <div className="flex space-x-6">
-          <div className="flex items-center space-x-2">
+          <div className="icon-text-container flex items-center space-x-2">
             <img
               src="icons/quantity.svg"
               alt="Quantity Icon"
-              className="sm:w-10 sm:h-10 w-5 h-5 "
+              className="sm:w-10 sm:h-10 w-5 h-5"
             />
             <span className="font-medium text-select-color sm:text-lg text-xs">
               {rfq.quantity}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="icon-text-container flex items-center space-x-2">
             <img
               src="icons/date.svg"
               alt="Date Icon"
-              className="sm:w-10 sm:h-10 w-5 h-5 "
+              className="sm:w-10 sm:h-10 w-5 h-5"
             />
             <span className="font-medium text-select-color sm:text-lg text-xs">
               {rfq.date}
@@ -63,11 +66,11 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
         </div>
 
         {/* Right: Category */}
-        <div className="flex items-center space-x-2 text-gray-500">
+        <div className="icon-text-container flex items-center space-x-2 text-gray-500">
           <img
             src="icons/category.svg"
             alt="Category Icon"
-            className="sm:w-10 sm:h-10 w-5 h-5 "
+            className="sm:w-10 sm:h-10 w-5 h-5"
           />
           <span className="font-medium sm:text-lg text-primary-color text-xs">
             {rfq.category}
