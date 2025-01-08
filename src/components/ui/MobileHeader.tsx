@@ -5,7 +5,9 @@ import MobileBuyerNav from "../common/MobileBuyerNav";
 import { LogoInside } from "../common/LogoInside";
 import SearchBox from "./../ui/SearchBox"; // Import SearchBox component
 
-const MobileHeader: React.FC = () => {
+const MobileHeader: React.FC<{ showSearchIcon?: boolean }> = ({
+  showSearchIcon = true, // Default value for visibility
+}) => {
   const [isNavVisible, setIsNavVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
@@ -24,23 +26,35 @@ const MobileHeader: React.FC = () => {
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full p-4 bg-transparent mobile-header">
         {/* Hamburger Menu Icon */}
-        <img
-          src="icons/menu.svg"
-          alt="Hamburger Menu"
-          className="w-8 h-8 cursor-pointer"
-          onClick={toggleNav}
-        />
+        <div className="flex-shrink-0">
+          <img
+            src="/icons/menu.svg"
+            alt="Hamburger Menu"
+            className="w-8 h-8 cursor-pointer"
+            onClick={toggleNav}
+          />
+        </div>
 
-        {/* Logo */}
-        <LogoInside />
+        {/* Logo (centered using flex-grow) */}
+        <div
+          className={`flex-1 flex justify-center ${
+            showSearchIcon ? "" : "pr-8"
+          }`}
+        >
+          <LogoInside />
+        </div>
 
         {/* Search Icon */}
-        <img
-          src="icons/search.svg"
-          alt="Search"
-          className="w-6 h-6 cursor-pointer"
-          onClick={toggleSearch} // Toggle search visibility
-        />
+        {showSearchIcon && (
+          <div className="flex-shrink-0">
+            <img
+              src="icons/search.svg"
+              alt="Search"
+              className="w-6 h-6 cursor-pointer"
+              onClick={toggleSearch} // Toggle search visibility
+            />
+          </div>
+        )}
       </div>
 
       {/* Search Box */}

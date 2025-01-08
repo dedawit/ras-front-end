@@ -4,6 +4,7 @@ import { SidebarLink } from "../../types/side-bar-link";
 import { cn } from "../../lib/utils";
 import Mode from "./Mode";
 import UserProfile from "./UserProfile";
+import { useUser } from "../../context/UserContext";
 
 const sidebarLinks: SidebarLink[] = [
   {
@@ -38,6 +39,7 @@ const mockUser = {
 };
 
 const Sidebar: FC = () => {
+  const { fullName, token } = useUser();
   const location = useLocation();
 
   return (
@@ -95,7 +97,12 @@ const Sidebar: FC = () => {
 
       <div className="flex flex-col justify-between mt-20 mb-10">
         <Mode />
-        <UserProfile user={mockUser} />
+        <UserProfile
+          user={{
+            name: fullName || "Anonymous User",
+            avatar: mockUser.avatar || "/place_holder/default-avatar.jpg",
+          }}
+        />
         <button className="rounded-md w-full px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold">
           Logout
         </button>

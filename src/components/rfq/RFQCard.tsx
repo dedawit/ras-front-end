@@ -13,7 +13,9 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
     <div className="bg-white rounded-lg border-color p-4 space-y-4 shadow-sm">
       {/* Title and Actions */}
       <div className="flex items-center justify-between">
-        <h3 className="sm:text-2xl font-extrabold text:sm">{rfq.title}</h3>
+        <h3 className="sm:text-2xl font-extrabold text:sm">
+          {rfq.productName}
+        </h3>
         <div className="actions flex items-center space-x-2">
           <Button2
             icon={"icons/eye.svg"}

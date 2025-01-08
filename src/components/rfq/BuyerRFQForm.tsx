@@ -5,9 +5,11 @@ import Header from "../ui/Header";
 import MobileHeader from "../ui/MobileHeader";
 import Sidebar from "../ui/SideBar";
 import RFQList from "./RFQList";
+import { useUser } from "../../context/UserContext";
 
 export const BuyerRFQForm: React.FC = () => {
   const navigate = useNavigate();
+  const { id: buyerId } = useUser();
 
   const handlePostRFQ = () => {
     navigate("/rfqs/post-rfq");
@@ -38,7 +40,7 @@ export const BuyerRFQForm: React.FC = () => {
         </div>
 
         <main className="flex-1 p-6 ">
-          <RFQList />
+          <RFQList buyerId={buyerId} />
         </main>
       </div>
     </div>

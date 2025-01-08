@@ -1,10 +1,10 @@
 export interface RFQ {
   id: string;
-  title: string;
+  productName: string;
   quantity: number | string;
   date?: string;
   category: string;
-  details?: string;
+  detail?: string;
   file?: File | null;
   expiryDate?: string;
 }

@@ -4,6 +4,7 @@ import Mode from "../ui/Mode";
 import UserProfile from "../ui/UserProfile";
 import { cn } from "../../lib/utils";
 import { LogoInside } from "./LogoInside";
+import { useUser } from "../../context/UserContext";
 
 const sidebarLinks: SidebarLink[] = [
   {
@@ -34,7 +35,7 @@ const sidebarLinks: SidebarLink[] = [
 
 const mockUser = {
   name: "Fasika Ewnetu",
-  avatar: "place_holder/fasika.jpg",
+  avatar: "/place_holder/fasika.jpg",
 };
 
 interface MobileBuyerNavProps {
@@ -42,13 +43,15 @@ interface MobileBuyerNavProps {
 }
 
 const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
+  const { fullName } = useUser();
+
   return (
     <div className="relative h-full  bg-brand">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full p-4 bg-transparent mobile-header">
         {/* Hamburger Menu Icon */}
         <img
-          src="icons/menu.svg"
+          src="/icons/menu.svg"
           alt="Hamburger Menu"
           className="w-8 h-8 cursor-pointer"
           onClick={onClose}
@@ -59,7 +62,7 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
 
         {/* Search Icon */}
         <img
-          src="icons/x.svg"
+          src="/icons/x.svg"
           alt="Search"
           className="w-8 h-8 cursor-pointer"
           onClick={onClose}
@@ -69,7 +72,7 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
       <nav className="space-y-2">
         {sidebarLinks.map((link) => {
           const isActive =
-            location.pathname === link.href ||
+            location.pathname.startsWith(link.href) ||
             (location.pathname === "/" && link.href === "/rfqs");
           const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 
@@ -108,7 +111,12 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
 
       <div className="flex flex-col justify-between mt-10 mb-10 w-full ">
         <Mode />
-        <UserProfile user={mockUser} />
+        <UserProfile
+          user={{
+            name: fullName || "Anonymous User",
+            avatar: mockUser.avatar || "/place_holder/default-avatar.jpg",
+          }}
+        />
         <button className="rounded-md mx-2 px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold ">
           Logout
         </button>

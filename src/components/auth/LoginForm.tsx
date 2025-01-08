@@ -10,6 +10,7 @@ import { FormErrors } from "../../types/user";
 import { LoginErrors } from "../../types/auth";
 import { Logo } from "../common/Logo";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../../context/UserContext";
 
 export const LoginForm: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialState);
@@ -17,6 +18,7 @@ export const LoginForm: React.FC = () => {
   const { notification, showNotification, hideNotification } =
     useNotification();
   const navigate = useNavigate();
+  const { setUser } = useUser();
 
   const validateForm = (): boolean => {
     const newErrors: LoginErrors = {};
@@ -39,6 +41,14 @@ export const LoginForm: React.FC = () => {
 
       try {
         const response = await authService.login(formData);
+        const { accessToken: token, firstName, lastName, id } = response;
+        const fullName = firstName + " " + lastName;
+
+        // Store token in localStorage for persistence
+        localStorage.setItem("authToken", token);
+
+        // Set user in context
+        setUser({ token, fullName, id });
         showNotification("success", "Login successful!");
         console.log(response);
         navigate("/rfqs");
