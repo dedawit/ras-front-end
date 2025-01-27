@@ -99,12 +99,12 @@ const PostRFQ: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-transparent">
+    <div className="flex h-screen bg-transparent w-full overflow-x-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full">
         <MobileHeader showSearchIcon={false} />
 
-        <div className="mt-8 sm:mt-24  md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg">
+        <div className="mt-8 sm:mt-24  md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
           <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
             Post RFQ
           </h2>
@@ -128,6 +128,7 @@ const PostRFQ: React.FC = () => {
             {/* Category Field */}
             <FormField label="Category" required>
               <CategorySelect
+                width="w-full"
                 value={formData.category}
                 onChange={(value) =>
                   setFormData({ ...formData, category: value })

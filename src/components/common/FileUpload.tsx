@@ -50,7 +50,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="flex flex-col items-start space-y-2 w-full">
+    <div className="flex flex-col items-start space-y-2 w-full max-w-full">
       {error && <p className="text-red-500">{error}</p>}
       {!fileName ? (
         <>
@@ -69,22 +69,22 @@ const FileUpload: React.FC<FileUploadProps> = ({ onChange }) => {
           />
         </>
       ) : (
-        <div className="flex flex-col w-full">
-          <span className="text-left w-full">
+        <div className="flex flex-col w-full max-w-full">
+          <span className="text-left w-full overflow-x-auto">
             {fileName.length > 20 ? `${fileName.slice(0, 35)}...` : fileName}
           </span>
-          <div className="flex space-x-2 mt-2 w-full">
+          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 mt-2 w-full max-w-full">
             <button
               type="button"
               onClick={() => document.getElementById("file-input")?.click()}
-              className="p-2 bg-primary-color text-white rounded-md hover:bg-blue-700 w-1/2"
+              className="p-2 bg-primary-color text-white rounded-md hover:bg-blue-700 w-full sm:w-1/2"
             >
               Change File
             </button>
             <button
               type="button"
               onClick={handleFileRemove}
-              className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 w-1/2"
+              className="p-2 bg-red-500 text-white rounded-md hover:bg-red-600 w-full sm:w-1/2"
             >
               Remove File
             </button>
