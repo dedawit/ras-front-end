@@ -1,11 +1,18 @@
-// src/components/MobileHeader.tsx
-
 import { useState } from "react";
 import MobileBuyerNav from "../common/MobileBuyerNav";
 import { LogoInside } from "../common/LogoInside";
 import SearchBox from "./../ui/SearchBox"; // Import SearchBox component
 
-const MobileHeader: React.FC<{ showSearchIcon?: boolean }> = ({
+interface MobileHeaderProps {
+  searchTerm?: string;
+  setSearchTerm?: any;
+  showSearchIcon?: boolean; // Optional prop to control visibility of search icon
+}
+
+const MobileHeader: React.FC<MobileHeaderProps> = ({
+  searchTerm = "",
+  setSearchTerm,
+
   showSearchIcon = true, // Default value for visibility
 }) => {
   const [isNavVisible, setIsNavVisible] = useState(false);
@@ -19,6 +26,12 @@ const MobileHeader: React.FC<{ showSearchIcon?: boolean }> = ({
   // Toggle the search box visibility
   const toggleSearch = () => {
     setIsSearchVisible((prev) => !prev);
+  };
+
+  const handleSearchTermChange = (newSearchTerm: string) => {
+    if (setSearchTerm) {
+      setSearchTerm(newSearchTerm);
+    }
   };
 
   return (
@@ -61,6 +74,8 @@ const MobileHeader: React.FC<{ showSearchIcon?: boolean }> = ({
       <SearchBox
         isVisible={isSearchVisible}
         onToggle={toggleSearch} // Pass the toggleSearch function to close the search box
+        searchTerm={searchTerm} // Pass searchTerm to SearchBox
+        setSearchTerm={setSearchTerm} // Pass setSearchTerm to SearchBox
       />
 
       {/* Mobile Buyer Navigation (conditionally rendered) */}

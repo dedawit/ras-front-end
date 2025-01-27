@@ -5,19 +5,25 @@ import { rfqService } from "../../services/rfq"; // Import the rfqService to fet
 import { Spinner } from "../ui/Spinner";
 
 interface RFQListProps {
-  buyerId: any; // Assuming buyerId is passed as a prop
+  buyerId: any;
+  searchTerm: string; // Add searchTerm as prop
+  selectedCategory: string; // Add selectedCategory as prop
 }
 
-const RFQList: FC<RFQListProps> = ({ buyerId }) => {
+const RFQList: FC<RFQListProps> = ({
+  buyerId,
+  searchTerm = "",
+  selectedCategory = "All Categories",
+}) => {
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
   const [loading, setLoading] = useState<boolean>(true); // State to manage the loading spinner
 
-  // Fetch RFQs from the API
   useEffect(() => {
     const fetchRFQs = async () => {
       try {
+        setLoading(true);
         const data = await rfqService.getRFQs(buyerId);
-        setRfqs(data); // Set the fetched RFQs into state
+        setRfqs(data.reverse()); // Reverse the data to show the newest first
       } catch (error) {
         console.error("Failed to load RFQs:", error);
       } finally {
@@ -28,20 +34,34 @@ const RFQList: FC<RFQListProps> = ({ buyerId }) => {
     fetchRFQs();
   }, [buyerId]); // Re-fetch RFQs when buyerId changes
 
+  const filteredRFQs = rfqs.filter((rfq) => {
+    console.log(searchTerm);
+    const matchesCategory =
+      selectedCategory === "All Categories" ||
+      rfq.category === selectedCategory;
+    const matchesSearch = rfq.productName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="spinner"></div>
-        <Spinner />
+        <Spinner className="border-primary-color" />
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {rfqs.map((rfq) => (
-        <RFQCard key={rfq.id} rfq={rfq} />
-      ))}
+      {/* Scrollable container with hidden scrollbar and vertical spacing */}
+      <div className="max-h-[600px] overflow-y-auto scrollbar-none space-y-4 custom-scroll">
+        {filteredRFQs.map((rfq) => (
+          <RFQCard key={rfq.id} rfq={rfq} />
+        ))}
+      </div>
     </div>
   );
 };

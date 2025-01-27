@@ -62,7 +62,11 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
               className="sm:w-10 sm:h-10 w-5 h-5"
             />
             <span className="font-medium text-select-color sm:text-lg text-xs">
-              {rfq.date}
+              {new Date(rfq.createdAt).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
             </span>
           </div>
         </div>

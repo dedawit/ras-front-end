@@ -160,3 +160,12 @@ body {
     margin-bottom: 0.25rem; /* Add spacing below the icon */
   }
 }
+
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.custom-scroll {
+  scrollbar-width: none;
+}

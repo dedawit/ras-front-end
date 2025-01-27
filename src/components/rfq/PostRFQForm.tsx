@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import FormField from "../common/FormField";
 import FileUpload from "../common/FileUpload";
 import CategorySelect from "../ui/CategorySelect";
@@ -8,12 +8,14 @@ import Sidebar from "../ui/SideBar";
 import { rfqService } from "../../services/rfq"; // Import the RFQ service
 import { useUser } from "./../../context/UserContext"; // Import the UserContext
 import MobileHeader from "../ui/MobileHeader";
+import { Spinner } from "../ui/Spinner"; // Import the Spinner component
+import { useNavigate } from "react-router-dom";
 
 const PostRFQ: React.FC = () => {
   const { id: userId } = useUser(); // Get user info from the context
   const [formData, setFormData] = useState<RFQ>({
     id: "",
-    title: "",
+    productName: "",
     category: "Electronics and Electrical Equipment",
     quantity: "",
     detail: "",
@@ -22,16 +24,19 @@ const PostRFQ: React.FC = () => {
   });
 
   const [errors, setErrors] = useState({
-    title: "",
+    productName: "",
     quantity: "",
     expiryDate: "", // Add expiryDate error
   });
 
   const [showExpiryDate, setShowExpiryDate] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
+  const navigate = useNavigate();
 
   const validateForm = (): boolean => {
     const newErrors: any = {};
-    if (!formData.title) newErrors.title = "Product name is required";
+    if (!formData.productName)
+      newErrors.productName = "Product name is required";
     if (!formData.quantity) newErrors.quantity = "Quantity is required";
 
     // Add validation for expiryDate if Set Expiry Date is checked
@@ -48,6 +53,7 @@ const PostRFQ: React.FC = () => {
     e.preventDefault();
 
     if (validateForm()) {
+      setIsLoading(true); // Start loading
       try {
         // Ensure the user is logged in and has a buyerId
         if (!userId) {
@@ -60,7 +66,7 @@ const PostRFQ: React.FC = () => {
 
         // Prepare the RFQ data
         const rfqData = {
-          productName: formData.title,
+          productName: formData.productName,
           quantity: Number(formData.quantity),
           category: formData.category,
           detail: formData.detail,
@@ -72,12 +78,16 @@ const PostRFQ: React.FC = () => {
 
         // Call the service to create the RFQ
         const response = await rfqService.createRFQ(buyerId, rfqData);
+        navigate("/rfqs"); // Redirect to RFQ list after successful post
 
         console.log("RFQ created successfully:", response);
-        // You can show a success message or handle the response accordingly.
+
+        // Handle success (e.g., show success notification or redirect)
       } catch (err: any) {
         console.error("Error creating RFQ:", err);
-        // Handle error, show an error message to the user
+        // Handle error (e.g., show error notification)
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     }
   };
@@ -94,8 +104,7 @@ const PostRFQ: React.FC = () => {
       <div className="flex-1 flex flex-col">
         <MobileHeader showSearchIcon={false} />
 
-        {/* Make the container responsive with flexible width */}
-        <div className="mt-8 sm:mt-24 sm:min-w-2xl max-w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg">
+        <div className="mt-8 sm:mt-24  md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg">
           <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
             Post RFQ
           </h2>
@@ -106,13 +115,13 @@ const PostRFQ: React.FC = () => {
               <input
                 type="text"
                 className="p-2 border rounded-md w-full sm:w-96"
-                value={formData.title}
+                value={formData.productName}
                 onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
+                  setFormData({ ...formData, productName: e.target.value })
                 }
               />
-              {errors.title && (
-                <p className="text-red-500 text-sm">{errors.title}</p>
+              {errors.productName && (
+                <p className="text-red-500 text-sm">{errors.productName}</p>
               )}
             </FormField>
 
@@ -194,7 +203,20 @@ const PostRFQ: React.FC = () => {
               </FormField>
             )}
 
-            <SubmitButton />
+            {/* Submit Button with Spinner */}
+            <button
+              className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
+              type="submit"
+            >
+              {isLoading ? (
+                <div className="flex justify-center items-center">
+                  <Spinner />
+                  <span className="ml-2">Posting RFQ...</span>
+                </div>
+              ) : (
+                "Post RFQ"
+              )}
+            </button>
           </form>
         </div>
       </div>

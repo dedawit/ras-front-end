@@ -7,6 +7,7 @@ export interface RFQ {
   detail?: string;
   file?: File | null;
   expiryDate?: string;
+  createdAt?: any;
 }
 
 export interface FormFieldProps {
