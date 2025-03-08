@@ -10,12 +10,15 @@ const UserProfile: FC<UserProfileProps> = ({ user }) => {
       <img
         src={user.avatar}
         alt={user.name}
-        className="w-20 h-20 rounded-full object-cover"
+        className="w-28 h-28 rounded-full object-cover"
       />
       <div>
         <h3 className="font-bold text-gray-900">{user.name}</h3>
-        <button className="text-primary text-sm hover:underline my-2">
-          My Account
+        <button className="primary-color text-sm  my-2 flex items-center">
+          My Account{" "}
+          <span className="ms-2">
+            <img src="/icons/triangle.svg" className="w-4 h-4" />
+          </span>
         </button>
       </div>
     </div>

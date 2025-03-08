@@ -11,6 +11,7 @@ import { Notification } from "../ui/Notification";
 import { Spinner } from "../ui/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../common/Logo";
+import Footer from "../ui/Footer";
 
 export const CreateAccountForm: React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);
@@ -135,7 +136,7 @@ export const CreateAccountForm: React.FC = () => {
             required
           />
           <PasswordField
-            label="Password"
+            label="Password (10 characters, atleast 1 uppercase, 1 lowercase, 1 number and 1 special character)"
             value={formData.password}
             onChange={(value) => updateField("password", value)}
             error={errors.password}

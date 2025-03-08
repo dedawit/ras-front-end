@@ -14,7 +14,11 @@ body {
 .border-color {
   border-color: #9aeaff !important;
   border-width: 3px !important;
-  border-radius: 82px;
+  border-radius: 25px;
+}
+
+.border-primary {
+  border-color: #3246d3 !important;
 }
 
 .logo-bottom {
@@ -45,10 +49,123 @@ body {
   background-color: #ffffff;
 }
 
+.group:hover .hover\:bg-white {
+  color: #3246d3; /* Matches primary color */
+}
+
 .transition-colors {
   transition: all 0.3s ease-in-out;
 }
 
 .group-hover\:scale-110:hover img {
   transform: scale(1.1);
+}
+
+.transparent-search-bg {
+  background-color: rgba(217, 217, 217, 0.34);
+}
+
+/* styles.css */
+.gradient-button {
+  background: linear-gradient(90deg, #8190fa, #3246d3);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(
+    90deg,
+    #3246d3,
+    #8190fa
+  ); /* Reverse gradient on hover */
+}
+
+.gradient-button:active {
+  transform: translateY(0);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+/* RFQ card styles */
+.actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+
+.actions button {
+  flex: 1; /* Make buttons equal width */
+  min-width: 80px !important; /* Set a minimum width for buttons */
+  max-width: 200px; /* Set an optional maximum width */
+  padding: 10px 20px; /* Larger padding for bigger buttons */
+  font-size: 16px; /* Increase font size */
+}
+
+@media (max-width: 1173px) {
+  .actions {
+    flex-direction: column; /* Stack buttons vertically */
+  }
+
+  .actions button {
+    width: 100%; /* Full width when stacked */
+  }
+}
+
+/* Hide the sidebar and header for screens smaller than 890px */
+@media (max-width: 890px) {
+  .sidebar,
+  .large-header {
+    display: none;
+  }
+}
+
+/* show mobile header*/
+@media (min-width: 890px) {
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* header.css */
+
+/* Hide Category Select on mobile and adjust margin */
+@media (max-width: 890px) {
+  .category-select {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 890px) {
+  .category-select {
+    display: inline-block;
+    width: auto;
+    margin-top: 0;
+  }
+}
+
+/*rfq card */
+@media (max-width: 408px) {
+  .icon-text-container {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    gap: 0.5rem; /* Add spacing between items */
+  }
+
+  .icon-text-container img {
+    margin-bottom: 0.25rem; /* Add spacing below the icon */
+  }
+}
+
+.custom-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.custom-scroll {
+  scrollbar-width: none;
 }

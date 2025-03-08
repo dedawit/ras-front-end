@@ -1,8 +1,20 @@
 export interface RFQ {
   id: string;
-  title: string;
-  quantity: number;
-  date: string;
+  productName: string;
+  quantity: number | string;
+  date?: string;
   category: string;
-  quotes: number;
+  detail?: string;
+  file?: File | null;
+  deadline?: string | null;
+  createdAt?: any;
+  state?: boolean;
+  fileUrl?: string;
+}
+
+export interface FormFieldProps {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+  error?: string;
 }
