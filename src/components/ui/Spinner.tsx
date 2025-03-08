@@ -1,23 +1,21 @@
 import React from "react";
 
 interface SpinnerProps {
-  color?: string; // Can accept Tailwind classes or a hex color
-  className?: string; // Additional Tailwind classes
+  color?: string; // Tailwind class for border color (e.g., "border-blue-500")
+  size?: string; // Tailwind class for size (e.g., "h-6 w-6" or "h-12 w-12")
+  thickness?: string; // Tailwind class for border thickness (e.g., "border-4")
+  className?: string; // Additional custom classes
 }
 
 export const Spinner: React.FC<SpinnerProps> = ({
-  color = "border-white", // Default to a Tailwind class
-  className = "",
+  color = "border-primary-color", // Default to a neutral color
+  thickness = "border-4", // Default thickness, controls ring weight
+  className = "h-6 w-6",
 }) => {
-  const isTailwindColor = color.startsWith("border-");
-
   return (
-    <div className={`flex justify-center ${className}`}>
+    <div className="flex justify-center items-center">
       <div
-        className={`animate-spin rounded-full h-6 w-6 border-b-2 ${
-          isTailwindColor ? color : ""
-        }`}
-        style={!isTailwindColor ? { borderColor: color } : undefined}
+        className={`animate-spin rounded-full border-solid  ${thickness} ${color} border-t-transparent ${className}`}
       ></div>
     </div>
   );

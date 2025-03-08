@@ -6,8 +6,10 @@ export interface RFQ {
   category: string;
   detail?: string;
   file?: File | null;
-  expiryDate?: string;
+  deadline?: string | null;
   createdAt?: any;
+  state?: boolean;
+  fileUrl?: string;
 }
 
 export interface FormFieldProps {

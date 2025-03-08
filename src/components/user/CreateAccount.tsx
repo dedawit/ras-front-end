@@ -11,6 +11,7 @@ import { Notification } from "../ui/Notification";
 import { Spinner } from "../ui/Spinner";
 import { useNavigate } from "react-router-dom";
 import { Logo } from "../common/Logo";
+import Footer from "../ui/Footer";
 
 export const CreateAccountForm: React.FC = () => {
   const [state, dispatch] = useReducer(formReducer, initialState);

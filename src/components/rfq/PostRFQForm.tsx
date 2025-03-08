@@ -10,6 +10,7 @@ import { useUser } from "./../../context/UserContext"; // Import the UserContext
 import MobileHeader from "../ui/MobileHeader";
 import { Spinner } from "../ui/Spinner"; // Import the Spinner component
 import { useNavigate } from "react-router-dom";
+import Footer from "../ui/Footer";
 
 const PostRFQ: React.FC = () => {
   const { id: userId } = useUser(); // Get user info from the context
@@ -20,13 +21,13 @@ const PostRFQ: React.FC = () => {
     quantity: "",
     detail: "",
     file: null,
-    expiryDate: "",
+    deadline: "",
   });
 
   const [errors, setErrors] = useState({
     productName: "",
     quantity: "",
-    expiryDate: "", // Add expiryDate error
+    deadline: "", // Add expiryDate error
   });
 
   const [showExpiryDate, setShowExpiryDate] = useState(false);
@@ -39,10 +40,8 @@ const PostRFQ: React.FC = () => {
       newErrors.productName = "Product name is required";
     if (!formData.quantity) newErrors.quantity = "Quantity is required";
 
-    // Add validation for expiryDate if Set Expiry Date is checked
-    if (showExpiryDate && !formData.expiryDate) {
-      newErrors.expiryDate =
-        "Expiry date is required when Set Expiry Date is selected";
+    if (showExpiryDate && !formData.deadline) {
+      newErrors.deadline = "Deadline is required when Set Deadline is selected";
     }
 
     setErrors(newErrors);
@@ -70,9 +69,7 @@ const PostRFQ: React.FC = () => {
           quantity: Number(formData.quantity),
           category: formData.category,
           detail: formData.detail,
-          deadline: formData.expiryDate
-            ? new Date(formData.expiryDate)
-            : undefined,
+          deadline: formData.deadline ? new Date(formData.deadline) : undefined,
           file: formData.file,
         };
 
@@ -182,24 +179,24 @@ const PostRFQ: React.FC = () => {
                   onChange={(e) => setShowExpiryDate(e.target.checked)}
                 />
                 <label htmlFor="set-expiry-date" className="text-sm">
-                  Set Expiry Date
+                  Set Deadline
                 </label>
               </div>
             </FormField>
 
-            {/* Expiry Date Input (Visible when checked) */}
+            {/* Deadline Input (Visible when checked) */}
             {showExpiryDate && (
-              <FormField label="Expiry Date" required>
+              <FormField label="Deadline" required>
                 <input
                   type="date"
                   className="w-full sm:w-96 p-2 border rounded-md"
-                  value={formData.expiryDate}
+                  value={formData.deadline}
                   onChange={(e) =>
-                    setFormData({ ...formData, expiryDate: e.target.value })
+                    setFormData({ ...formData, deadline: e.target.value })
                   }
                 />
-                {errors.expiryDate && (
-                  <p className="text-red-500 text-sm">{errors.expiryDate}</p>
+                {errors.deadline && (
+                  <p className="text-red-500 text-sm">{errors.deadline}</p>
                 )}
               </FormField>
             )}

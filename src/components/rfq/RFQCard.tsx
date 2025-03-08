@@ -3,12 +3,21 @@ import { RFQ } from "../../types/rfq";
 import { RiEyeLine, RiEditLine, RiMore2Line } from "react-icons/ri";
 import { Button } from "../ui/Button";
 import Button2 from "../ui/Button2";
+import { useNavigate } from "react-router-dom";
 
 interface RFQCardProps {
   rfq: RFQ;
 }
 
 const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
+  const navigate = useNavigate();
+
+  const handleViewClick = () => {
+    navigate(`/view-rfq/${rfq.id}`);
+  };
+  const handleEditClick = () => {
+    navigate(`/edit-rfq/${rfq.id}`);
+  };
   return (
     <div className="bg-white rounded-lg border-color p-4 space-y-4 shadow-sm">
       {/* Title and Actions */}
@@ -22,14 +31,14 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
             text="View"
             textClassName="sm:block hidden"
             width="200px"
-            onClick={() => alert("Button clicked!")}
+            onClick={handleViewClick}
           />
           <Button2
             icon={"icons/edit.svg"}
             text="Edit"
             textClassName="sm:block hidden"
             width="200px"
-            onClick={() => alert("Button clicked!")}
+            onClick={handleEditClick}
           />
           <Button2
             icon={"icons/quote.svg"}

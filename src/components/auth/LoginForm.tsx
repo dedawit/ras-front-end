@@ -11,6 +11,7 @@ import { LoginErrors } from "../../types/auth";
 import { Logo } from "../common/Logo";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import Footer from "../ui/Footer";
 
 export const LoginForm: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialState);
@@ -66,11 +67,11 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col">
       <div className="container">
         <Logo />
       </div>
-      <div className="min-h-screen flex items-center justify-center my-4">
+      <div className="flex-grow flex items-center justify-center my-4">
         {notification && (
           <Notification
             type={notification.type}
@@ -78,13 +79,11 @@ export const LoginForm: React.FC = () => {
             onClose={hideNotification}
           />
         )}
-
         <div className="w-full max-w-md">
           <div className="space-y-4 p-8 border rounded-lg shadow-lg max-w-2xl mx-auto bg-transparent my-auto">
             <h2 className="text-2xl font-bold text-center primary-color mb-8">
               Login
             </h2>
-
             <form onSubmit={handleSubmit} className="space-y-6">
               <InputField
                 label="Email"
@@ -94,7 +93,6 @@ export const LoginForm: React.FC = () => {
                 error={errors.email}
                 required
               />
-
               <PasswordField
                 label="Password"
                 value={formData.password}
@@ -102,7 +100,6 @@ export const LoginForm: React.FC = () => {
                 error={errors.password}
                 required
               />
-
               <div className="text-right">
                 <a
                   href="/forgot-password"
@@ -111,7 +108,6 @@ export const LoginForm: React.FC = () => {
                   Forgot Password
                 </a>
               </div>
-
               <button
                 type="submit"
                 disabled={isLoading}
@@ -126,9 +122,8 @@ export const LoginForm: React.FC = () => {
                   "Login"
                 )}
               </button>
-
               <p className="text-center text-sm primary-color">
-                Don't have account?{" "}
+                Don't have an account?{" "}
                 <a
                   href="/create-account"
                   className="primary-color underline custom-underline"
