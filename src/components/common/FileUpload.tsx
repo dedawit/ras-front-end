@@ -108,7 +108,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onChange, existingFile }) => {
             <button
               type="button"
               onClick={() => document.getElementById("file-input")?.click()}
-              className="flex-1 sm:w-32 bg-yellow-500 text-white p-2 rounded-md"
+              className="flex-1 sm:w-32 bg-primary-color text-white rounded-md hover:bg-blue-700 p-2"
             >
               Change
             </button>

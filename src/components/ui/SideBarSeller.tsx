@@ -114,7 +114,7 @@ const SidebarSeller: FC = () => {
         })}
       </nav>
 
-      <div className="flex flex-col justify-between mt-20 mb-10">
+      <div className="flex flex-col justify-between mt-2 mb-10">
         <Mode />
         <UserProfile
           user={{

@@ -3,8 +3,14 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 type UserContextType = {
   token: string | null;
   fullName: string | null;
-  id: string | null; // Allow id to be string or null
-  setUser: (user: { token: string; fullName: string; id: string }) => void; // Include id in the setUser method
+  id: string | null;
+  lastRole: string | null; // Added lastRole
+  setUser: (user: {
+    token: string;
+    fullName: string;
+    id: string;
+    lastRole: string;
+  }) => void; // Updated setUser
   clearUser: () => void;
 };
 
@@ -21,7 +27,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [id, setId] = useState<string | null>(() =>
     localStorage.getItem("userId")
-  ); // State for id
+  );
+  const [lastRole, setLastRole] = useState<string | null>(() =>
+    // Added lastRole state
+    localStorage.getItem("lastRole")
+  );
 
   useEffect(() => {
     if (token) {
@@ -37,29 +47,46 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (id) {
-      localStorage.setItem("userId", id); // Store id in localStorage
+      localStorage.setItem("userId", id);
     } else {
       localStorage.removeItem("userId");
     }
-  }, [token, fullName, id]);
 
-  const setUser = (user: { token: string; fullName: string; id: string }) => {
+    if (lastRole) {
+      // Added lastRole storage
+      localStorage.setItem("lastRole", lastRole);
+    } else {
+      localStorage.removeItem("lastRole");
+    }
+  }, [token, fullName, id, lastRole]);
+
+  const setUser = (user: {
+    token: string;
+    fullName: string;
+    id: string;
+    lastRole: string;
+  }) => {
     setToken(user.token);
     setFullName(user.fullName);
-    setId(user.id); // Set the id when user logs in
+    setId(user.id);
+    setLastRole(user.lastRole); // Set the lastRole
   };
 
   const clearUser = () => {
     setToken(null);
     setFullName(null);
-    setId(null); // Clear the id when user logs out
+    setId(null);
+    setLastRole(null); // Clear the lastRole
     localStorage.removeItem("authToken");
     localStorage.removeItem("fullName");
-    localStorage.removeItem("userId"); // Remove id from localStorage
+    localStorage.removeItem("userId");
+    localStorage.removeItem("lastRole"); // Remove lastRole from localStorage
   };
 
   return (
-    <UserContext.Provider value={{ token, fullName, id, setUser, clearUser }}>
+    <UserContext.Provider
+      value={{ token, fullName, id, lastRole, setUser, clearUser }}
+    >
       {children}
     </UserContext.Provider>
   );

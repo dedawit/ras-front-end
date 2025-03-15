@@ -52,7 +52,7 @@ export const LoginForm: React.FC = () => {
         const fullName = firstName + " " + lastName;
 
         localStorage.setItem("authToken", token);
-        setUser({ token, fullName, id });
+        setUser({ token, fullName, id, lastRole });
         showNotification("success", "Login successful!");
         console.log(response);
 
