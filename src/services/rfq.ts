@@ -86,6 +86,31 @@ export const rfqService = {
     }
   },
 
+  async getRFQsSeller(sellerId: string) {
+    try {
+      // Send GET request to fetch RFQs for the buyer
+      const response = await api.get(`/rfq/${sellerId}/seller/view-all-rfqs`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Send the token in the request headers
+        },
+      });
+
+      // Sort the RFQs by createdAt, newest first
+      const sortedRFQs = response.data.sort(
+        (a: RFQ, b: RFQ) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      return sortedRFQs; // Return the sorted list of RFQs
+    } catch (error: any) {
+      console.error(
+        "Error occurred:",
+        error.response ? error.response.data : error.message
+      );
+      throw handleApiError(error); // Handle errors if any
+    }
+  },
+
   async viewRFQ(rfqId: string) {
     try {
       const response = await api.get(`/rfq/${rfqId}/view-rfq`, {

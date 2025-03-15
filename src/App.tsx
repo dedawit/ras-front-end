@@ -13,6 +13,8 @@ import { UserProvider } from "./context/UserContext";
 import Footer from "./components/ui/Footer";
 import ViewRFQ from "./components/rfq/ViewRFQForm";
 import EditRFQ from "./components/rfq/EditRFQ";
+import { SellerRFQForm } from "./components/rfq/SellerRFQForm";
+import ViewRFQSeller from "./components/rfq/ViewRFQSeller";
 function App() {
   return (
     <Router>
@@ -23,8 +25,12 @@ function App() {
 
           <Route path="/" element={<CreateAccountForm />} />
           <Route path="/rfqs" element={<BuyerRFQForm />} />
+          <Route path="/rfq-seller" element={<SellerRFQForm />} />
+
           <Route path="/rfqs/post-rfq" element={<PostRFQ />} />
           <Route path="/view-rfq/:id" element={<ViewRFQ />} />
+          <Route path="/rfq-seller/view-rfq/:id" element={<ViewRFQSeller />} />
+
           <Route path="/edit-rfq/:id" element={<EditRFQ />} />
         </Routes>
       </UserProvider>

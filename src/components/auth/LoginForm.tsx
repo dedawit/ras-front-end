@@ -42,18 +42,26 @@ export const LoginForm: React.FC = () => {
 
       try {
         const response = await authService.login(formData);
-        const { accessToken: token, firstName, lastName, id } = response;
+        const {
+          accessToken: token,
+          firstName,
+          lastName,
+          id,
+          lastRole,
+        } = response;
         const fullName = firstName + " " + lastName;
 
-        // Store token in localStorage for persistence
         localStorage.setItem("authToken", token);
-
-        // Set user in context
         setUser({ token, fullName, id });
         showNotification("success", "Login successful!");
         console.log(response);
-        navigate("/rfqs");
-        // Redirect after a short delay to show the success message
+
+        // Navigate based on lastRole
+        if (lastRole === "seller") {
+          navigate("/rfq-seller");
+        } else {
+          navigate("/rfqs");
+        }
       } catch (error: any) {
         showNotification("error", error.message);
       } finally {
