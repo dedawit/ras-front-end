@@ -1,15 +1,18 @@
 export interface RFQ {
   id: string;
-  productName: string;
+  title: string;
+  projectName: string;
+  purchaseNumber: string;
   quantity: number | string;
-  date?: string;
   category: string;
   detail?: string;
-  file?: File | null;
-  deadline?: string | null;
+  auctionDoc?: File | string | null;
+  guidelineDoc?: File | string | null;
+  deadline: string | null;
   createdAt?: any;
-  state?: boolean;
-  fileUrl?: string;
+  state?: string;
+  autionDocUrl?: string;
+  guidelineDocUrl?: string;
 }
 
 export interface FormFieldProps {

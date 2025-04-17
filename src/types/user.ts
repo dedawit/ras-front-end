@@ -24,4 +24,21 @@ export interface User {
   avatar: string;
 }
 
+export interface FullUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  telephone: string;
+  isActive: boolean;
+  lastRole: "buyer" | "seller";
+  password?: string;
+  refreshToken?: string;
+  tokenVersion?: number;
+  profile?: any;
+  createdAt: string;
+  deletedAt: string | null;
+}
+
 export type UserMode = "buyer" | "seller";

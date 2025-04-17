@@ -1,36 +1,33 @@
 import { FC } from "react";
-import { RFQ } from "../../types/rfq";
-import { RiEyeLine, RiEditLine, RiMore2Line } from "react-icons/ri";
-import { Button } from "../ui/Button";
-import Button2 from "../ui/Button2";
+import { Bid } from "../../types/bid";
 import { useNavigate } from "react-router-dom";
+import Button2 from "../ui/Button2";
+import { Coins, Package } from "lucide-react";
 
-interface RFQCardProps {
-  rfq: RFQ;
+interface BidCardProps {
+  bid: Bid;
 }
 
-const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
+const BidCard: FC<BidCardProps> = ({ bid }) => {
   const navigate = useNavigate();
 
   const handleViewClick = () => {
-    navigate(`/rfqs/view-rfq/${rfq.id}`);
+    navigate(`/bids/view-bid/${bid.id}`);
   };
+
   const handleEditClick = () => {
-    navigate(`/rfqs/edit-rfq/${rfq.id}`);
+    navigate(`/bids/edit-bid/${bid.id}`);
   };
 
-  const handleViewQuote = () => {
-    navigate(`/rfqs/view-quotes/${rfq.id}`);
-  };
-
-  // Determine status color
-  const getStatusColor = (state: string) => {
+  // Status color logic (you might want to adjust based on your bid states)
+  const getStatusColor = (state: string = "opened") => {
     switch (state.toLowerCase()) {
       case "opened":
         return "bg-green-100 text-green-800";
+      case "rejected":
       case "closed":
         return "bg-red-100 text-red-800";
-      case "awarded":
+      case "awareded":
         return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -39,22 +36,21 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
 
   return (
     <div className="bg-white rounded-lg border-color p-4 space-y-4 shadow-sm">
-      {/* Title, Purchase Number and Actions */}
+      {/* Bid ID and Actions */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
         <div className="space-y-1">
           <h3 className="sm:text-2xl font-extrabold text:sm">
-            {rfq.purchaseNumber}
+            {bid.rfq.purchaseNumber}
           </h3>
-          <p className="text-sm text-gray-600 sm:text-base">{rfq.title}</p>
+          <p className="text-sm text-gray-600 sm:text-base"> {bid.rfq.title}</p>
         </div>
         <div className="flex flex-col items-start sm:items-end gap-2">
-          {/* Status Box */}
           <span
             className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-              rfq.state || "opened"
+              bid.state // Assuming you add a state field to Bid interface
             )}`}
           >
-            {rfq.state}
+            {bid.state}
           </span>
           <div className="actions flex items-center space-x-2">
             <Button2
@@ -71,29 +67,17 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
               width="200px"
               onClick={handleEditClick}
             />
-            <Button2
-              icon={"icons/quote.svg"}
-              text="View Quotes"
-              textClassName="sm:block hidden"
-              width="200px"
-              onClick={handleViewQuote}
-            />
           </div>
         </div>
       </div>
 
-      {/* Quantity, Date, and Category */}
+      {/* Bid Details */}
       <div className="flex items-center justify-between">
-        {/* Left: Quantity and Date */}
         <div className="flex space-x-6">
           <div className="icon-text-container flex items-center space-x-2">
-            <img
-              src="icons/quantity.svg"
-              alt="Quantity Icon"
-              className="sm:w-10 sm:h-10 w-5 h-5"
-            />
-            <span className="font-medium text-select-color sm:text-lg text-xs">
-              {rfq.quantity}
+            <Coins className="sm:w-10 sm:h-10 w-5 h-5 text-gray-700" />
+            <span className="font-medium sm:text-lg text-primary-color text-xs">
+              ETB: {Number(bid.totalPrice).toFixed(2)}
             </span>
           </div>
           <div className="icon-text-container flex items-center space-x-2">
@@ -104,14 +88,14 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
             />
             <span
               className={`font-medium sm:text-lg text-xs ${
-                rfq.deadline && new Date(rfq.deadline) >= new Date()
+                bid.rfq.deadline && new Date(bid.rfq.deadline) >= new Date()
                   ? "text-red-500"
                   : "text-select-color"
               }`}
             >
-              {rfq.deadline
+              {bid.rfq.deadline
                 ? (() => {
-                    const deadlineDate = new Date(rfq.deadline);
+                    const deadlineDate = new Date(bid.rfq.deadline);
                     const today = new Date();
                     const timeDiff = deadlineDate.getTime() - today.getTime();
                     const daysLeft = Math.ceil(
@@ -119,7 +103,7 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
                     ); // Convert ms to days
                     return daysLeft >= 0
                       ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
-                      : new Date(rfq.deadline).toLocaleDateString("en-GB", {
+                      : new Date(bid.rfq.deadline).toLocaleDateString("en-GB", {
                           day: "2-digit",
                           month: "2-digit",
                           year: "numeric",
@@ -130,20 +114,16 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
           </div>
         </div>
 
-        {/* Right: Category */}
-        <div className="icon-text-container flex items-center space-x-2 text-gray-500">
-          <img
-            src="icons/category.svg"
-            alt="Category Icon"
-            className="sm:w-10 sm:h-10 w-5 h-5"
-          />
+        {/* Total Price */}
+        {/* <div className="icon-text-container flex items-center space-x-2 text-gray-500">
+          <Coins className="sm:w-10 sm:h-10 w-5 h-5 text-gray-700" />
           <span className="font-medium sm:text-lg text-primary-color text-xs">
-            {rfq.category}
+            ETB: {Number(bid.totalPrice).toFixed(2)}
           </span>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
-export default RFQCard;
+export default BidCard;

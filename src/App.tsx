@@ -15,6 +15,12 @@ import ViewRFQ from "./components/rfq/ViewRFQForm";
 import EditRFQ from "./components/rfq/EditRFQ";
 import { SellerRFQForm } from "./components/rfq/SellerRFQForm";
 import ViewRFQSeller from "./components/rfq/ViewRFQSeller";
+import Bid from "./components/rfq/Bid";
+import { SellerBidList } from "./components/bid/SellerBidList";
+import ViewBid from "./components/rfq/ViewBid";
+import EditBid from "./components/bid/EditBid";
+import { BuyerBidList } from "./components/bid/BuyerBidList";
+import ViewBidBuyer from "./components/rfq/ViewBidBuyer";
 function App() {
   return (
     <Router>
@@ -28,10 +34,18 @@ function App() {
           <Route path="/rfq-seller" element={<SellerRFQForm />} />
 
           <Route path="/rfqs/post-rfq" element={<PostRFQ />} />
-          <Route path="/view-rfq/:id" element={<ViewRFQ />} />
+          <Route path="/rfqs/view-rfq/:id" element={<ViewRFQ />} />
           <Route path="/rfq-seller/view-rfq/:id" element={<ViewRFQSeller />} />
+          <Route path="/bids/single/:id" element={<Bid />} />
+          <Route path="/bids" element={<SellerBidList />} />
+          {/* <Route path="/rfqs/" element={<BuyerBidList />} /> */}
 
-          <Route path="/edit-rfq/:id" element={<EditRFQ />} />
+          <Route path="/bids/view-bid/:id" element={<ViewBid />} />
+          <Route path="/bids/edit-bid/:id" element={<EditBid />} />
+
+          <Route path="/rfqs/edit-rfq/:id" element={<EditRFQ />} />
+          <Route path="/rfqs/view-quotes/:id" element={<BuyerBidList />} />
+          <Route path="/rfqs/view-quotes/bid/:id" element={<ViewBidBuyer />} />
         </Routes>
       </UserProvider>
     </Router>

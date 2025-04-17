@@ -4,14 +4,13 @@ import CategorySelect from "../ui/CategorySelect";
 import Header from "../ui/Header";
 import MobileHeader from "../ui/MobileHeader";
 import Sidebar from "../ui/SideBar";
-import RFQList from "./RFQList";
 import { useUser } from "../../context/UserContext";
 import { useState } from "react";
 import Footer from "../ui/Footer";
 import SidebarSeller from "../ui/SideBarSeller";
-import RFQListSeller from "./RFQListSeller";
+import BidList from "./BidList";
 
-export const SellerRFQForm: React.FC = () => {
+export const SellerBidList: React.FC = () => {
   const navigate = useNavigate();
   const { id: sellerId } = useUser();
 
@@ -43,8 +42,8 @@ export const SellerRFQForm: React.FC = () => {
 
           {/* Ensure the main content scrolls but not the whole page */}
           <main className="flex-1 p-6 overflow-auto">
-            <RFQListSeller
-              sellerId={sellerId}
+            <BidList
+              sellerId={sellerId ?? ""}
               searchTerm={searchTerm}
               selectedCategory={selectedCategory}
             />

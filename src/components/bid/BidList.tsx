@@ -1,60 +1,68 @@
 import { FC, useEffect, useState } from "react";
-import RFQCardSeller from "./RFQCardSeller";
-import { RFQ } from "../../types/rfq";
-import { rfqService } from "../../services/rfq";
+import BidCard from "./BidCard";
+import { Bid } from "../../types/bid";
+import { bidService } from "../../services/bid";
 import { Spinner } from "../ui/Spinner";
+import BidBuyerCard from "./BidBuyerCard";
 
-interface RFQListProps {
-  sellerId: any;
+interface BidListProps {
+  sellerId?: string; // Optional for seller
+  rfqId?: string; // Optional for buyer
   searchTerm: string;
   selectedCategory: string;
 }
 
-const RFQListSeller: FC<RFQListProps> = ({
+const BidList: FC<BidListProps> = ({
   sellerId,
+  rfqId,
   searchTerm = "",
   selectedCategory = "All Categories",
 }) => {
-  const [rfqs, setRfqs] = useState<RFQ[]>([]);
+  const [bids, setBids] = useState<Bid[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+  const role = localStorage.getItem("lastRole");
+
   useEffect(() => {
-    const fetchRFQs = async () => {
+    const fetchBids = async () => {
       try {
         setLoading(true);
-        const data = await rfqService.getRFQsSeller(sellerId);
-        setRfqs(data.reverse()); // Reverse to show newest first
+        let data: Bid[] = [];
+
+        if (role === "seller" && sellerId) {
+          data = await bidService.getBidsBySeller(sellerId);
+        } else if (role === "buyer" && rfqId) {
+          data = await bidService.getBidsByRFQ(rfqId);
+        }
+        console.log(data);
+        setBids(data);
       } catch (error) {
-        console.error("Failed to load RFQs:", error);
+        console.error("Failed to load bids:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRFQs();
-  }, [sellerId]);
+    fetchBids();
+  }, [role, sellerId, rfqId]);
 
-  // Filter RFQs based on search term and category
-  const filteredRFQs = rfqs.filter((rfq) => {
+  const filteredBids = bids.filter((bid) => {
     const matchesCategory =
       selectedCategory === "All Categories" ||
-      rfq.category === selectedCategory;
-    const matchesSearch = rfq.purchaseNumber
+      bid.rfq.category === selectedCategory;
+    const matchesSearch = bid.rfq.purchaseNumber
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  // Pagination logic
-  const totalItems = filteredRFQs.length;
+  const totalItems = filteredBids.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentRFQs = filteredRFQs.slice(startIndex, endIndex);
+  const currentBids = filteredBids.slice(startIndex, startIndex + itemsPerPage);
 
-  // Handle page change
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
@@ -71,19 +79,24 @@ const RFQListSeller: FC<RFQListProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* RFQ List */}
+      {/* Bid List */}
       <div className="max-h-[600px] overflow-y-auto scrollbar-none space-y-4 custom-scroll">
-        {currentRFQs.length > 0 ? (
-          currentRFQs.map((rfq) => <RFQCardSeller key={rfq.id} rfq={rfq} />)
+        {currentBids.length > 0 ? (
+          currentBids.map((bid) =>
+            role === "buyer" ? (
+              <BidBuyerCard key={bid.id} bid={bid} />
+            ) : (
+              <BidCard key={bid.id} bid={bid} />
+            )
+          )
         ) : (
-          <p className="text-center text-gray-500">No RFQs found</p>
+          <p className="text-center text-gray-500">No bids found</p>
         )}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       {totalItems > itemsPerPage && (
         <div className="flex justify-center items-center space-x-2 mt-4">
-          {/* Previous Button */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
@@ -96,7 +109,6 @@ const RFQListSeller: FC<RFQListProps> = ({
             Previous
           </button>
 
-          {/* Page Numbers */}
           <div className="flex space-x-1">
             {Array.from({ length: totalPages }, (_, index) => index + 1).map(
               (page) => (
@@ -115,7 +127,6 @@ const RFQListSeller: FC<RFQListProps> = ({
             )}
           </div>
 
-          {/* Next Button */}
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
@@ -133,4 +144,4 @@ const RFQListSeller: FC<RFQListProps> = ({
   );
 };
 
-export default RFQListSeller;
+export default BidList;

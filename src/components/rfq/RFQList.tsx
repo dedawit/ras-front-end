@@ -17,15 +17,15 @@ const RFQList: FC<RFQListProps> = ({
 }) => {
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1); // Current page state
-  const itemsPerPage = 10; // 10 items per page
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchRFQs = async () => {
       try {
         setLoading(true);
         const data = await rfqService.getRFQs(buyerId);
-        setRfqs(data.reverse()); // Reverse to show newest first (assuming this aligns with createdAt sorting)
+        setRfqs(data); // Reverse to show newest first (assuming this aligns with createdAt sorting)
       } catch (error) {
         console.error("Failed to load RFQs:", error);
       } finally {
@@ -41,7 +41,7 @@ const RFQList: FC<RFQListProps> = ({
     const matchesCategory =
       selectedCategory === "All Categories" ||
       rfq.category === selectedCategory;
-    const matchesSearch = rfq.productName
+    const matchesSearch = rfq.purchaseNumber
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
