@@ -6,32 +6,28 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { Bid, BidItem } from "../../types/bid";
-import { bidService } from "../../services/bid"; // Adjust path
-import Sidebar from "../ui/SideBar";
+import { bidService } from "../../services/bid";
 
-const ViewBidBuyer: React.FC = () => {
+const ViewBid: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = useParams<{ id: string }>(); // id is string | undefined
+  const { id } = useParams<{ id: string }>();
   const [error, setError] = useState<string | null>(null);
-
   const { notification, showNotification, hideNotification } =
     useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<Bid | null>(null);
 
-  // Fetch bid data when component mounts
   useEffect(() => {
     const fetchBid = async () => {
       if (!id) {
         showNotification("error", "No bid ID provided");
-        // navigate("/bids");
         return;
       }
 
       setIsLoading(true);
       try {
-        const bidData = await bidService.viewBid(id); // id is guaranteed to be string here
+        const bidData = await bidService.viewBid(id);
         setFormData(bidData);
       } catch (err: any) {
         showNotification(
@@ -48,15 +44,42 @@ const ViewBidBuyer: React.FC = () => {
     fetchBid();
   }, [id, navigate, showNotification]);
 
-  if (isLoading || !formData) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <Spinner />
-      </div>
-    );
-  }
+  const handleMakeTransaction = () => {
+    if (formData) {
+      navigate("/transaction", {
+        state: {
+          bid: {
+            id: id,
+            projectName: formData.rfq.projectName,
+            quantity: formData.rfq.quantity,
+            totalPrice: formData.totalPrice,
+          },
+        },
+      });
+    }
+  };
 
-  // Handle file download
+  const handleAwardBid = async () => {
+    if (!id) {
+      showNotification("error", "No bid ID provided");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await bidService.awardBid(id);
+      showNotification("success", "Bid awarded successfully!");
+      setFormData((prev) => (prev ? { ...prev, status: "awarded" } : prev));
+    } catch (err: any) {
+      showNotification(
+        "error",
+        err.message || "Failed to award bid. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDownload = async (bidId: string, filePath: string) => {
     try {
       const filename = extractFilename(filePath);
@@ -66,22 +89,28 @@ const ViewBidBuyer: React.FC = () => {
     }
   };
 
-  // Extract filename from full path
   const extractFilename = (filePath: string): string => {
     const parts = filePath.split("/");
-    return parts[parts.length - 1]; // Get the last part after the last slash
+    return parts[parts.length - 1];
   };
+
+  if (isLoading || !formData) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-transparent w-full">
       <div className="fixed top-0 left-0 h-full w-64 hidden md:block">
-        <Sidebar />
+        <SidebarSeller />
       </div>
 
       <div className="flex-1 flex flex-col w-full md:ml-64">
         <MobileHeader showSearchIcon={false} />
 
-        {/* Notification Display */}
         {notification && (
           <Notification
             type={notification.type}
@@ -97,7 +126,6 @@ const ViewBidBuyer: React.FC = () => {
             </h2>
 
             <div className="space-y-6">
-              {/* Display Bid Documents */}
               <div className="flex items-center gap-3">
                 <label className="text-base font-medium text-gray-700">
                   Bid Documents:
@@ -137,7 +165,6 @@ const ViewBidBuyer: React.FC = () => {
                 {error && <p className="text-red-500 text-base">{error}</p>}
               </div>
 
-              {/* Display Bid Items */}
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium">Items</h3>
@@ -190,14 +217,30 @@ const ViewBidBuyer: React.FC = () => {
                 </div>
               </div>
 
-              {/* Back Button */}
-
-              <button
-                onClick={() => navigate(-1)}
-                className="max-w-64 p-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
-              >
-                Back to Bids
-              </button>
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => navigate("/bids")}
+                  className="max-w-64 p-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
+                >
+                  Back to Bids
+                </button>
+                {formData.state === "awarded" ? (
+                  <button
+                    onClick={handleMakeTransaction}
+                    className="max-w-64 p-3 text-white bg-primary-color rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
+                  >
+                    Make Transaction
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleAwardBid}
+                    className="max-w-64 p-3 text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 transition-all duration-300"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Awarding..." : "Award Bid"}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -206,4 +249,4 @@ const ViewBidBuyer: React.FC = () => {
   );
 };
 
-export default ViewBidBuyer;
+export default ViewBid;

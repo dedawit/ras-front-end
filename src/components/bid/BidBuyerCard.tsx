@@ -23,8 +23,8 @@ const BidBuyerCard: FC<BidCardProps> = ({ bid }) => {
       case "rejected":
       case "closed":
         return "bg-red-100 text-red-800";
-      case "awareded":
-        return "bg-blue-100 text-blue-800";
+      case "awarded":
+        return "bg-yellow-100 text-yellow-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -40,24 +40,22 @@ const BidBuyerCard: FC<BidCardProps> = ({ bid }) => {
           </h3>
           <p className="text-sm text-gray-600 sm:text-base"> {bid.rfq.title}</p>
         </div> */}
-        <div className="flex flex-col items-start sm:items-end gap-2">
-          {/* <span
+        {/* <div className="flex flex-col items-end space-y-2">
+          <span
             className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-              bid.state // Assuming you add a state field to Bid interface
+              bid.state
             )}`}
           >
             {bid.state}
-          </span> */}
-          {/* <div className="actions flex items-center space-x-2">
-            <Button2
-              icon={"/icons/eye.svg"}
-              text="View"
-              textClassName="sm:block hidden"
-              width="200px"
-              onClick={handleViewClick}
-            />
-          </div> */}
-        </div>
+          </span>
+          <Button2
+            icon={"/icons/eye.svg"}
+            text="View"
+            textClassName="sm:block hidden"
+            width="200px"
+            onClick={handleViewClick}
+          />
+        </div> */}
       </div>
 
       {/* Bid Details */}
@@ -116,7 +114,23 @@ const BidBuyerCard: FC<BidCardProps> = ({ bid }) => {
             ETB: {Number(bid.totalPrice).toFixed(2)}
           </span>
         </div> */}
-        <div className="actions flex items-center space-x-2">
+        {/* <div className="actions flex items-center space-x-2">
+          <Button2
+            icon={"/icons/eye.svg"}
+            text="View"
+            textClassName="sm:block hidden"
+            width="200px"
+            onClick={handleViewClick}
+          />
+        </div> */}
+        <div className="flex flex-col items-end space-y-2">
+          <span
+            className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+              bid.state
+            )}`}
+          >
+            {bid.state}
+          </span>
           <Button2
             icon={"/icons/eye.svg"}
             text="View"

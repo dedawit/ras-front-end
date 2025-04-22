@@ -222,4 +222,29 @@ export const bidService = {
       throw handleApiError(error);
     }
   },
+  /**
+   * Award a Bid (only accessible to buyers)
+   */
+  async awardBid(bidId: string): Promise<string> {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
+      const response = await api.patch(
+        `/bid/buyer/${bidId}/award`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Bid awarded:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error awarding Bid:", error);
+      throw handleApiError(error);
+    }
+  },
 };
