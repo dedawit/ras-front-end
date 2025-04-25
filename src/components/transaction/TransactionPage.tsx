@@ -184,9 +184,9 @@ const TransactionPage: React.FC = () => {
             <div className="flex justify-between mt-6">
               <button
                 className="p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
-                onClick={() => navigate("/bids")}
+                onClick={() => navigate(-1)}
               >
-                Back to Bids
+                Back to Bid Detail
               </button>
               <button
                 className="p-3 bg-primary-color text-white rounded-md hover:bg-blue-700"

@@ -22,6 +22,7 @@ import EditBid from "./components/bid/EditBid";
 import { BuyerBidList } from "./components/bid/BuyerBidList";
 import ViewBidBuyer from "./components/rfq/ViewBidBuyer";
 import TransactionPage from "./components/transaction/TransactionPage";
+import PaymentSuccessPage from "./components/transaction/PaymentSuccess";
 function App() {
   return (
     <Router>
@@ -48,6 +49,7 @@ function App() {
           <Route path="/rfqs/view-quotes/:id" element={<BuyerBidList />} />
           <Route path="/rfqs/view-quotes/bid/:id" element={<ViewBidBuyer />} />
           <Route path="/transaction" element={<TransactionPage />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
         </Routes>
       </UserProvider>
     </Router>

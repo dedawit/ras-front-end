@@ -7,6 +7,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { Bid, BidItem } from "../../types/bid";
 import { bidService } from "../../services/bid";
+import Sidebar from "../ui/SideBar";
 
 const ViewBid: React.FC = () => {
   const navigate = useNavigate();
@@ -105,7 +106,7 @@ const ViewBid: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-transparent w-full">
       <div className="fixed top-0 left-0 h-full w-64 hidden md:block">
-        <SidebarSeller />
+        <Sidebar />
       </div>
 
       <div className="flex-1 flex flex-col w-full md:ml-64">
@@ -219,7 +220,7 @@ const ViewBid: React.FC = () => {
 
               <div className="flex items-center gap-4">
                 <button
-                  onClick={() => navigate("/bids")}
+                  onClick={() => navigate(-1)}
                   className="max-w-64 p-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
                 >
                   Back to Bids
