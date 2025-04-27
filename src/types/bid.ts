@@ -25,6 +25,7 @@ export interface Bid {
   deletedAt?: string | null; // Optional for sending, returned for soft delete
   bidFilesUrl?: string; // Optional for sending, returned by backend
   state: string;
+  transactions?: any[]; // Optional for sending, returned by backend
 }
 
 // Optional: FormFieldProps for form components

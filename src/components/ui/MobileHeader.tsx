@@ -1,31 +1,31 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import MobileBuyerNav from "../common/MobileBuyerNav";
-import MobileSellerNav from "../common/MobileSellerNav"; // Add this import
+import MobileSellerNav from "../common/MobileSellerNav";
 import { LogoInside } from "../common/LogoInside";
-import SearchBox from "./../ui/SearchBox";
+import SearchBox from "../ui/SearchBox";
 import { useUser } from "../../context/UserContext";
 
 interface MobileHeaderProps {
   searchTerm?: string;
-  setSearchTerm?: any;
+  setSearchTerm?: React.Dispatch<React.SetStateAction<string>>;
   showSearchIcon?: boolean;
+  placeholder?: string;
 }
 
-const MobileHeader: React.FC<MobileHeaderProps> = ({
+const MobileHeader: FC<MobileHeaderProps> = ({
   searchTerm = "",
   setSearchTerm,
   showSearchIcon = true,
+  placeholder = "Search RFQ...",
 }) => {
-  const { lastRole } = useUser(); // Get lastRole from UserContext
+  const { lastRole } = useUser();
   const [isNavVisible, setIsNavVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
-  // Toggle the mobile navigation menu
   const toggleNav = () => {
     setIsNavVisible((prev) => !prev);
   };
 
-  // Toggle the search box visibility
   const toggleSearch = () => {
     setIsSearchVisible((prev) => !prev);
   };
@@ -36,7 +36,6 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     }
   };
 
-  // Determine which nav to show based on lastRole
   const NavComponent = lastRole === "seller" ? MobileSellerNav : MobileBuyerNav;
 
   return (
@@ -81,9 +80,10 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
         onToggle={toggleSearch}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
+        placeholder={placeholder}
       />
 
-      {/* Mobile Navigation (conditionally rendered based on lastRole) */}
+      {/* Mobile Navigation */}
       <div
         className={`fixed inset-0 z-50 bg-white shadow-lg transition-transform duration-300 mobile-header ${
           isNavVisible ? "translate-x-0" : "-translate-x-full"

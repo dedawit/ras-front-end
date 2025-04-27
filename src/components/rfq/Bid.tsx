@@ -425,7 +425,7 @@ const BidComponent: React.FC = () => {
               </div>
 
               <button
-                className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
+                className="max-w-64 p-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
                 type="submit"
               >
                 {isLoading ? (

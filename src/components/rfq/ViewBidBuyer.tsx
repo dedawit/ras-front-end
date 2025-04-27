@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SidebarSeller from "../ui/SideBarSeller";
+import Sidebar from "../ui/SideBar";
 import MobileHeader from "../ui/MobileHeader";
 import { Spinner } from "../ui/Spinner";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { Bid, BidItem } from "../../types/bid";
 import { bidService } from "../../services/bid";
-import Sidebar from "../ui/SideBar";
+import AwardButton from "../ui/AwardButton";
 
 const ViewBid: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const ViewBid: React.FC = () => {
     useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<Bid | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchBid = async () => {
@@ -70,7 +71,8 @@ const ViewBid: React.FC = () => {
     try {
       await bidService.awardBid(id);
       showNotification("success", "Bid awarded successfully!");
-      setFormData((prev) => (prev ? { ...prev, status: "awarded" } : prev));
+      setFormData((prev) => (prev ? { ...prev, state: "awarded" } : prev));
+      setShowModal(false);
     } catch (err: any) {
       showNotification(
         "error",
@@ -225,26 +227,55 @@ const ViewBid: React.FC = () => {
                 >
                   Back to Bids
                 </button>
-                {formData.state === "awarded" ? (
-                  <button
-                    onClick={handleMakeTransaction}
-                    className="max-w-64 p-3 text-white bg-primary-color rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
-                  >
-                    Make Transaction
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleAwardBid}
-                    className="max-w-64 p-3 text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 transition-all duration-300"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Awarding..." : "Award Bid"}
-                  </button>
-                )}
+                {formData.state !== "rejected" &&
+                formData.transactions?.length === 0 ? (
+                  <>
+                    {formData.state === "awarded" ? (
+                      <button
+                        onClick={handleMakeTransaction}
+                        className="max-w-64 p-3 text-white bg-primary-color rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
+                      >
+                        Make Transaction
+                      </button>
+                    ) : formData.state === "closed" ? (
+                      <AwardButton
+                        isAwarding={isLoading}
+                        setShowModal={setShowModal}
+                      />
+                    ) : null}
+                  </>
+                ) : null}
               </div>
             </div>
           </div>
         </div>
+
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+              <h3 className="text-lg font-semibold mb-4">Confirm Award Bid</h3>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to award this bid? This action cannot be
+                undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAwardBid}
+                  className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-700"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Awarding..." : "Confirm"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ const TransactionPage: React.FC = () => {
     useNotification();
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState<TransactionData>({
-    transactionId: `REC-${Date.now()}`, // Default receipt reference
+    transactionId: "",
     projectName: "",
     quantity: 0,
     totalPrice: 0,

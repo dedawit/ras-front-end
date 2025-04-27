@@ -1,58 +1,80 @@
 import { FC, useEffect, useState } from "react";
-import RFQCardSeller from "./RFQCardSeller";
-import { RFQ } from "../../types/rfq";
-import { rfqService } from "../../services/rfq";
 import { Spinner } from "../ui/Spinner";
+import { transactionService } from "../../services/transaction";
+import TransactionCardBuyer from "./TransactionCardBuyer";
+import { Transaction } from "../../types/transaction";
 
-interface RFQListProps {
-  sellerId: any;
-  searchTerm: string;
-  selectedCategory: string;
+interface TransactionListProps {
+  buyerId: string;
+  searchTerm?: string;
 }
 
-const RFQListSeller: FC<RFQListProps> = ({
-  sellerId,
+const TransactionBuyerList: FC<TransactionListProps> = ({
+  buyerId,
   searchTerm = "",
-  selectedCategory = "All Categories",
 }) => {
-  const [rfqs, setRfqs] = useState<RFQ[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const fetchRFQs = async () => {
+    const fetchTransactions = async () => {
       try {
         setLoading(true);
-        const data = await rfqService.getRFQsSeller(sellerId);
-        setRfqs(data); // Reverse to show newest first
+        let data: Transaction[] = [];
+
+        const lastRole = localStorage.getItem("lastRole");
+        if (lastRole === "seller") {
+          // Fetch transactions for sellers
+          const sellerTransactions =
+            await transactionService.getTransactionsSeller(buyerId);
+          data = sellerTransactions.map((t) => ({
+            transactionId: t.transactionId,
+            companyName: t.bid?.rfq?.createdBy?.companyName || "",
+            totalPrice: t.bid?.totalPrice || 0,
+            date: t.date,
+            id: t.id, // Ensure 'id' is included
+            bid: t.bid, // Ensure 'bid' is included
+          }));
+        } else {
+          // Fetch transactions for buyers
+          const buyerTransactions = await transactionService.getTransactions(
+            buyerId
+          );
+          data = buyerTransactions.map((t) => ({
+            transactionId: t.transactionId,
+            companyName: t.bid?.createdBy?.companyName || "",
+            totalPrice: t.bid?.totalPrice || 0,
+            date: t.date,
+            id: t.id, // Ensure 'id' is included
+            bid: t.bid, // Ensure 'bid' is included
+          }));
+        }
+        console.log(data);
+
+        setTransactions(data);
       } catch (error) {
-        console.error("Failed to load RFQs:", error);
+        console.error("Failed to load transactions:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRFQs();
-  }, [sellerId]);
+    fetchTransactions();
+  }, [buyerId]);
 
-  // Filter RFQs based on search term and category
-  const filteredRFQs = rfqs.filter((rfq) => {
-    const matchesCategory =
-      selectedCategory === "All Categories" ||
-      rfq.category === selectedCategory;
-    const matchesSearch = rfq.purchaseNumber
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Filter transactions based on search term
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.transactionId.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Pagination logic
-  const totalItems = filteredRFQs.length;
+  const totalItems = filteredTransactions.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentRFQs = filteredRFQs.slice(startIndex, endIndex);
+  const currentTransactions = filteredTransactions.slice(startIndex, endIndex);
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -71,12 +93,17 @@ const RFQListSeller: FC<RFQListProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* RFQ List */}
+      {/* Transaction List */}
       <div className="max-h-[600px] overflow-y-auto scrollbar-none space-y-4 custom-scroll">
-        {currentRFQs.length > 0 ? (
-          currentRFQs.map((rfq) => <RFQCardSeller key={rfq.id} rfq={rfq} />)
+        {currentTransactions.length > 0 ? (
+          currentTransactions.map((transaction) => (
+            <TransactionCardBuyer
+              key={transaction.transactionId}
+              transaction={transaction}
+            />
+          ))
         ) : (
-          <p className="text-center text-gray-500">No RFQs found</p>
+          <p className="text-center text-gray-500">No transactions found</p>
         )}
       </div>
 
@@ -133,4 +160,4 @@ const RFQListSeller: FC<RFQListProps> = ({
   );
 };
 
-export default RFQListSeller;
+export default TransactionBuyerList;

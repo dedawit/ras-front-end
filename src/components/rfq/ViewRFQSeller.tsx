@@ -59,7 +59,7 @@ const ViewRFQSeller: React.FC = () => {
       case "awarded":
         return {
           text: "Awarded",
-          className: "bg-blue-100 text-blue-800 border-blue-600",
+          className: "bg-yellow-100 text-yellow-800 border-yellow-600",
         };
       default:
         return {
@@ -199,7 +199,6 @@ const ViewRFQSeller: React.FC = () => {
                 </FormField>
 
                 {/* File Downloads */}
-
                 <FormField label="Auction Document">
                   <button
                     onClick={() =>
@@ -260,19 +259,21 @@ const ViewRFQSeller: React.FC = () => {
                   />
                 </FormField>
 
-                <button
-                  onClick={() =>
-                    navigate(`/bids/single/${rfq?.id}`, {
-                      state: {
-                        purchaseNumber: rfq.purchaseNumber,
-                        rfqId: rfq.id,
-                      },
-                    })
-                  }
-                  className="w-full p-3  bg-primary-color text-white rounded-md hover:bg-blue-700  mt-4"
-                >
-                  Bid Now
-                </button>
+                {rfq.state === "opened" && (
+                  <button
+                    onClick={() =>
+                      navigate(`/bids/single/${rfq?.id}`, {
+                        state: {
+                          purchaseNumber: rfq.purchaseNumber,
+                          rfqId: rfq.id,
+                        },
+                      })
+                    }
+                    className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-4"
+                  >
+                    Bid Now
+                  </button>
+                )}
               </div>
             )}
           </div>

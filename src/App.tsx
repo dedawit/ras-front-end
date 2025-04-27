@@ -23,6 +23,8 @@ import { BuyerBidList } from "./components/bid/BuyerBidList";
 import ViewBidBuyer from "./components/rfq/ViewBidBuyer";
 import TransactionPage from "./components/transaction/TransactionPage";
 import PaymentSuccessPage from "./components/transaction/PaymentSuccess";
+import TransactionHistoryBuyer from "./components/transaction/TransactionHistoryBuyer";
+import ViewTransaction from "./components/transaction/ViewTransaction";
 function App() {
   return (
     <Router>
@@ -50,6 +52,8 @@ function App() {
           <Route path="/rfqs/view-quotes/bid/:id" element={<ViewBidBuyer />} />
           <Route path="/transaction" element={<TransactionPage />} />
           <Route path="/payment-success" element={<PaymentSuccessPage />} />
+          <Route path="/transactions" element={<TransactionHistoryBuyer />} />
+          <Route path="/transactions/view/:id" element={<ViewTransaction />} />
         </Routes>
       </UserProvider>
     </Router>

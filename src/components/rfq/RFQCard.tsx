@@ -113,17 +113,26 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
                 ? (() => {
                     const deadlineDate = new Date(rfq.deadline);
                     const today = new Date();
+                    // Set today to start of day for comparison
+                    today.setHours(0, 0, 0, 0);
+                    deadlineDate.setHours(0, 0, 0, 0);
                     const timeDiff = deadlineDate.getTime() - today.getTime();
                     const daysLeft = Math.ceil(
                       timeDiff / (1000 * 60 * 60 * 24)
-                    ); // Convert ms to days
-                    return daysLeft >= 0
-                      ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
-                      : new Date(rfq.deadline).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        });
+                    );
+
+                    // Check if deadline is today or in the future
+                    if (new Date(rfq.deadline) >= new Date()) {
+                      return daysLeft >= 0
+                        ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
+                        : "Today";
+                    }
+                    // For expired deadlines, show formatted date
+                    return new Date(rfq.deadline).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    });
                   })()
                 : "N/A"}
             </span>

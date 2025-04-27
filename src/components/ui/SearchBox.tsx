@@ -1,38 +1,36 @@
-import { ChangeEvent } from "react";
+import { FC } from "react";
+import { RiSearchLine } from "react-icons/ri";
 
 interface SearchBoxProps {
   isVisible: boolean;
   onToggle: () => void;
   searchTerm: string;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  setSearchTerm?: (term: string) => void;
+  placeholder?: string;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({
+const SearchBox: FC<SearchBoxProps> = ({
   isVisible,
   onToggle,
   searchTerm,
   setSearchTerm,
+  placeholder = "Search RFQ...",
 }) => {
-  // Handle input change
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-  };
-
   return (
     <div
-      className={`mobile-header fixed top-0 left-1/2 transform -translate-x-1/2 z-50 w-3/4 sm:w-1/2 bg-white transition-transform duration-300 ease-in-out ${
-        isVisible ? "translate-y-0" : "-translate-y-[120%]" // Increased translate value
+      className={`w-full transition-all duration-300 ${
+        isVisible ? "block" : "hidden"
       }`}
     >
-      <div className="flex justify-center items-center h-12">
-        {/* Search input */}
+      <div className="relative w-full p-4">
         <input
           type="text"
-          value={searchTerm} // Controlled input
-          onChange={handleInputChange} // Update searchTerm on input change
-          placeholder="Search RFQ..."
-          className="p-4 w-full border rounded-md focus:outline-none"
+          placeholder={placeholder}
+          className="w-full px-4 py-2 pr-12 bg-select-background transparent-search-bg border rounded-full focus:outline-none focus:ring-2 focus:ring-primary/50"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
         />
+        <RiSearchLine className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
       </div>
     </div>
   );
