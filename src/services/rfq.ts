@@ -31,7 +31,7 @@ export const rfqService = {
       if (rfqData.guidelineDoc)
         formData.append("guidelineDoc", rfqData.guidelineDoc);
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       const response = await api.post(
@@ -54,7 +54,9 @@ export const rfqService = {
   async getRFQs(buyerId: string) {
     try {
       const response = await api.get(`/rfq/${buyerId}/view-all-rfqs`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       return response.data.sort(
         (a: RFQ, b: RFQ) =>
@@ -69,7 +71,9 @@ export const rfqService = {
   async getRFQsSeller(sellerId: string) {
     try {
       const response = await api.get(`/rfq/${sellerId}/seller/view-all-rfqs`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       return response.data.sort(
         (a: RFQ, b: RFQ) =>
@@ -84,7 +88,9 @@ export const rfqService = {
   async viewRFQ(rfqId: string) {
     try {
       const response = await api.get(`/rfq/${rfqId}/view-rfq`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       console.log(response.data);
       return response.data;
@@ -117,7 +123,7 @@ export const rfqService = {
         }
       });
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       // Debug FormData contents
@@ -144,7 +150,9 @@ export const rfqService = {
         `/rfq/${rfqId}/${action}-rfq`,
         {},
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
         }
       );
       return response.data;
@@ -158,7 +166,9 @@ export const rfqService = {
     try {
       const response = await api.get(`/rfq/${rfqId}/${filename}`, {
         responseType: "blob", // To handle file download
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
 
       // Create a download link
@@ -177,7 +187,9 @@ export const rfqService = {
   async deleteRFQ(rfqId: string): Promise<void> {
     try {
       await api.delete(`/rfq/${rfqId}/delete-rfq`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
     } catch (error) {
       console.error("Error deleting RFQ:", error);

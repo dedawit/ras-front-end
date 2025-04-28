@@ -51,7 +51,7 @@ export const bidService = {
         formData.append("bidFiles", bidData.bidFiles);
       }
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       const response = await api.post(
@@ -81,7 +81,9 @@ export const bidService = {
   async getBidsByRFQ(rfqId: string) {
     try {
       const response = await api.get(`/bid/rfq/${rfqId}/view-all-bids`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       return response.data.sort(
         (a: Bid, b: Bid) =>
@@ -99,7 +101,9 @@ export const bidService = {
   async getBidsBySeller(sellerId: string) {
     try {
       const response = await api.get(`/bid/seller/${sellerId}/view-all-bids`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       console.log(response.data);
 
@@ -119,7 +123,9 @@ export const bidService = {
   async viewBid(bidId: string) {
     try {
       const response = await api.get(`/bid/${bidId}/view-bid`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       console.log(response.data);
       return response.data;
@@ -135,7 +141,9 @@ export const bidService = {
   async deleteBid(bidId: string): Promise<void> {
     try {
       await api.delete(`/bid/${bidId}/delete-bid`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
     } catch (error) {
       console.error("Error deleting Bid:", error);
@@ -150,7 +158,9 @@ export const bidService = {
     try {
       const response = await api.get(`/bid/${bidId}/file/${filename}`, {
         responseType: "blob", // To handle file download
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
 
       // Create a download link
@@ -196,7 +206,7 @@ export const bidService = {
         formData.append("bidFiles", bidData.bidFiles); // Existing URL
       }
 
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       // Debug FormData contents
@@ -227,7 +237,7 @@ export const bidService = {
    */
   async awardBid(bidId: string): Promise<string> {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       const response = await api.patch(

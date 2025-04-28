@@ -1,4 +1,3 @@
-// userService.ts
 import api from "../config/axios";
 import { handleApiError } from "../utils/errorHandler";
 
@@ -10,14 +9,31 @@ export interface UserData {
   email: string;
   password: string;
   lastRole: "buyer" | "seller";
-  profile?: string;
+  profile?: string | null;
 }
 
-// Function to create a user
 export const userService = {
   async createUser(userData: UserData) {
     try {
       const response = await api.post("/user/create", userData);
+      return response.data;
+    } catch (error: any) {
+      throw handleApiError(error);
+    }
+  },
+
+  async switchRole(userId: string, newRole: "buyer" | "seller") {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await api.patch(
+        `/user/switch-role/${userId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       return response.data;
     } catch (error: any) {
       throw handleApiError(error);

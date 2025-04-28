@@ -20,7 +20,7 @@ export interface SingleTransaction {
 export const transactionService = {
   async createTransaction(buyerId: string, transactionData: TransactionData) {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("accessToken");
       if (!token) throw new Error("No authentication token found");
 
       const response = await api.post(
@@ -46,7 +46,9 @@ export const transactionService = {
   async getTransactions(buyerId: string): Promise<Transaction[]> {
     try {
       const response = await api.get(`/transaction/buyer/${buyerId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       return response.data.sort(
         (a: Transaction, b: Transaction) =>
@@ -61,7 +63,9 @@ export const transactionService = {
   async getTransactionById(transactionId: string): Promise<SingleTransaction> {
     try {
       const response = await api.get(`/transaction/${transactionId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
 
       const data = response.data;
@@ -86,7 +90,9 @@ export const transactionService = {
   async getTransactionsSeller(sellerId: string): Promise<Transaction[]> {
     try {
       const response = await api.get(`/transaction/seller/${sellerId}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
       });
       return response.data.sort(
         (a: Transaction, b: Transaction) =>

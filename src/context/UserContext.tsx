@@ -1,18 +1,18 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-type UserContextType = {
+export interface UserContextType {
   token: string | null;
   fullName: string | null;
   id: string | null;
-  lastRole: string | null; // Added lastRole
+  lastRole: string | null;
   setUser: (user: {
     token: string;
     fullName: string;
     id: string;
     lastRole: string;
-  }) => void; // Updated setUser
+  }) => void;
   clearUser: () => void;
-};
+}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -20,7 +20,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("authToken")
+    localStorage.getItem("accessToken")
   );
   const [fullName, setFullName] = useState<string | null>(() =>
     localStorage.getItem("fullName")
@@ -29,15 +29,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     localStorage.getItem("userId")
   );
   const [lastRole, setLastRole] = useState<string | null>(() =>
-    // Added lastRole state
     localStorage.getItem("lastRole")
   );
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("accessToken", token);
     } else {
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
     }
 
     if (fullName) {
@@ -53,7 +52,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (lastRole) {
-      // Added lastRole storage
       localStorage.setItem("lastRole", lastRole);
     } else {
       localStorage.removeItem("lastRole");
@@ -69,18 +67,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     setToken(user.token);
     setFullName(user.fullName);
     setId(user.id);
-    setLastRole(user.lastRole); // Set the lastRole
+    setLastRole(user.lastRole);
   };
 
   const clearUser = () => {
     setToken(null);
     setFullName(null);
     setId(null);
-    setLastRole(null); // Clear the lastRole
-    localStorage.removeItem("authToken");
+    setLastRole(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("fullName");
     localStorage.removeItem("userId");
-    localStorage.removeItem("lastRole"); // Remove lastRole from localStorage
+    localStorage.removeItem("lastRole");
   };
 
   return (

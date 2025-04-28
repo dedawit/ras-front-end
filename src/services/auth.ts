@@ -6,7 +6,8 @@ export const authService = {
   async login(credentials: LoginCredentials) {
     try {
       const { data } = await api.post("/auth/login", credentials);
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
       return data;
     } catch (error: any) {
       throw handleApiError(error);
@@ -16,8 +17,25 @@ export const authService = {
   async logout(): Promise<void> {
     try {
       await api.post("/auth/logout");
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
     } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+
+  async refreshToken(): Promise<string> {
+    try {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        throw new Error("No refresh token available");
+      }
+      const { data } = await api.post("/auth/refresh-token", { refreshToken });
+      localStorage.setItem("accessToken", data.accessToken);
+      return data.accessToken;
+    } catch (error: any) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       throw handleApiError(error);
     }
   },

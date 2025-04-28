@@ -4,14 +4,12 @@ import { PasswordField } from "../forms/PasswordField";
 import { Spinner } from "../ui/Spinner";
 import { Notification } from "../ui/Notification";
 import { loginReducer, initialState } from "../../reducers/loginReducer";
-import { authService } from "../../services/auth";
 import { useNotification } from "../../hooks/useNotification";
-import { FormErrors } from "../../types/user";
 import { LoginErrors } from "../../types/auth";
 import { Logo } from "../common/Logo";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
-import Footer from "../ui/Footer";
+import { authService } from "../../services/auth";
 
 export const LoginForm: React.FC = () => {
   const [state, dispatch] = useReducer(loginReducer, initialState);
@@ -42,19 +40,12 @@ export const LoginForm: React.FC = () => {
 
       try {
         const response = await authService.login(formData);
-        const {
-          accessToken: token,
-          firstName,
-          lastName,
-          id,
-          lastRole,
-        } = response;
-        const fullName = firstName + " " + lastName;
+        const { accessToken, refreshToken, firstName, lastName, id, lastRole } =
+          response;
+        const fullName = `${firstName} ${lastName}`;
 
-        localStorage.setItem("authToken", token);
-        setUser({ token, fullName, id, lastRole });
+        setUser({ token: accessToken, fullName, id, lastRole });
         showNotification("success", "Login successful!");
-        console.log(response);
 
         // Navigate based on lastRole
         if (lastRole === "seller") {
