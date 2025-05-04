@@ -14,16 +14,6 @@ export const authService = {
     }
   },
 
-  async logout(): Promise<void> {
-    try {
-      await api.post("/auth/logout");
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-    } catch (error) {
-      throw handleApiError(error);
-    }
-  },
-
   async refreshToken(): Promise<string> {
     try {
       const refreshToken = localStorage.getItem("refreshToken");
@@ -36,6 +26,24 @@ export const authService = {
     } catch (error: any) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      throw handleApiError(error);
+    }
+  },
+  async logout(): Promise<void> {
+    try {
+      const token = localStorage.getItem("accessToken");
+      await api.post(
+        "/auth/logout",
+        {}, // No body
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    } catch (error) {
       throw handleApiError(error);
     }
   },

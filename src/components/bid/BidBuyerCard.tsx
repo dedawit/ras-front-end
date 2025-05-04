@@ -3,6 +3,7 @@ import { Bid } from "../../types/bid";
 import { useNavigate } from "react-router-dom";
 import Button2 from "../ui/Button2";
 import { Building, Coins, Package } from "lucide-react";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 interface BidCardProps {
   bid: Bid;
@@ -70,7 +71,7 @@ const BidBuyerCard: FC<BidCardProps> = ({ bid }) => {
           <div className="icon-text-container flex items-center space-x-2 text-gray-500">
             <Coins className="sm:w-10 sm:h-10 w-5 h-5 text-gray-700" />
             <span className="font-medium sm:text-lg text-primary-color text-xs">
-              ETB: {Number(bid.totalPrice).toFixed(2)}
+              ETB: {formatNumberWithCommas(Number(bid.totalPrice))}
             </span>
           </div>
           {/* <div className="icon-text-container flex items-center space-x-2">

@@ -3,6 +3,7 @@ import { Bid } from "../../types/bid";
 import { useNavigate } from "react-router-dom";
 import Button2 from "../ui/Button2";
 import { Coins, Package } from "lucide-react";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 interface BidCardProps {
   bid: Bid;
@@ -60,13 +61,15 @@ const BidCard: FC<BidCardProps> = ({ bid }) => {
               width="200px"
               onClick={handleViewClick}
             />
-            <Button2
-              icon={"icons/edit.svg"}
-              text="Edit"
-              textClassName="sm:block hidden"
-              width="200px"
-              onClick={handleEditClick}
-            />
+            {bid.state?.toLowerCase() === "opened" && (
+              <Button2
+                icon={"icons/edit.svg"}
+                text="Edit"
+                textClassName="sm:block hidden"
+                width="200px"
+                onClick={handleEditClick}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -77,7 +80,7 @@ const BidCard: FC<BidCardProps> = ({ bid }) => {
           <div className="icon-text-container flex items-center space-x-2">
             <Coins className="sm:w-10 sm:h-10 w-5 h-5 text-gray-700" />
             <span className="font-medium sm:text-lg text-primary-color text-xs">
-              ETB: {Number(bid.totalPrice).toFixed(2)}
+              ETB: {formatNumberWithCommas(Number(bid.totalPrice))}
             </span>
           </div>
           <div className="icon-text-container flex items-center space-x-2">
@@ -97,17 +100,29 @@ const BidCard: FC<BidCardProps> = ({ bid }) => {
                 ? (() => {
                     const deadlineDate = new Date(bid.rfq.deadline);
                     const today = new Date();
+                    // Set today to start of day for comparison
+                    today.setHours(0, 0, 0, 0);
+                    deadlineDate.setHours(0, 0, 0, 0);
                     const timeDiff = deadlineDate.getTime() - today.getTime();
                     const daysLeft = Math.ceil(
                       timeDiff / (1000 * 60 * 60 * 24)
-                    ); // Convert ms to days
-                    return daysLeft >= 0
-                      ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
-                      : new Date(bid.rfq.deadline).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        });
+                    );
+
+                    // Check if deadline is today or in the future
+                    if (new Date(bid.rfq.deadline) >= new Date()) {
+                      return daysLeft >= 0
+                        ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
+                        : "Today";
+                    }
+                    // For expired deadlines, show formatted date
+                    return new Date(bid.rfq.deadline).toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      }
+                    );
                   })()
                 : "N/A"}
             </span>

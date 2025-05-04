@@ -22,6 +22,7 @@ const Header: FC<HeaderProps> = ({
       <div className="flex items-center space-x-4 w-full">
         {selectedCategory !== undefined && setSelectedCategory && (
           <CategorySelect
+            width="min-w-[50%]"
             value={selectedCategory}
             onChange={(category) => setSelectedCategory(category)}
           />

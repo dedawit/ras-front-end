@@ -103,4 +103,18 @@ export const transactionService = {
       throw handleApiError(error);
     }
   },
+  // Add this new method
+  async generateTransactionId(buyerId: string): Promise<string> {
+    try {
+      const response = await api.get(`/transaction/${buyerId}/generate-id`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      return response.data.transactionId;
+    } catch (error) {
+      console.error("Error generating transaction ID:", error);
+      throw handleApiError(error);
+    }
+  },
 };

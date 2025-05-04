@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormField from "../common/FormField";
 import FileUpload from "../common/FileUpload";
 import CategorySelect from "../ui/CategorySelect";
@@ -44,6 +44,26 @@ const PostRFQ: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  // Fetch generated purchase number on mount
+  useEffect(() => {
+    const fetchPurchaseNumber = async () => {
+      if (!userId) {
+        console.error("User ID not available");
+        return;
+      }
+      try {
+        const purchaseNumber = await rfqService.getGeneratedPurchaseNumber(
+          userId
+        );
+        setFormData((prev) => ({ ...prev, purchaseNumber }));
+      } catch (error) {
+        console.error("Failed to fetch purchase number:", error);
+        showNotification("error", "Failed to load purchase number.");
+      }
+    };
+
+    fetchPurchaseNumber();
+  }, [userId, showNotification]);
 
   const validateForm = (): boolean => {
     const newErrors: any = {};

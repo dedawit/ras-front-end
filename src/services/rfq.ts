@@ -16,6 +16,27 @@ export interface RFQData {
 }
 
 export const rfqService = {
+  /**
+   * Fetches a generated purchase number for a specific buyer
+   */
+  async getGeneratedPurchaseNumber(buyerId: string): Promise<string> {
+    try {
+      console.log(buyerId, "test");
+      const response = await api.get(
+        `/rfq/${buyerId}/generate-purchase-number`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+      return response.data.purchaseNumber;
+    } catch (error) {
+      console.error("Error fetching generated purchase number:", error);
+      throw handleApiError(error);
+    }
+  },
+
   async createRFQ(buyerId: string, rfqData: RFQData) {
     try {
       const formData = new FormData();

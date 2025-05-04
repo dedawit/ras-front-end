@@ -24,7 +24,7 @@ interface CategorySelectProps {
 }
 
 const CategorySelect: FC<CategorySelectProps> = ({
-  width = "w-96",
+  width = "max-w-full",
   value,
   onChange,
   excludeAllCategories = false,
@@ -73,7 +73,7 @@ const CategorySelect: FC<CategorySelectProps> = ({
       </Button>
       {/* Dropdown menu */}
       {isDropdownOpen && (
-        <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded shadow-lg">
+        <div className="absolute mt-2 w-full bg-white border border-gray-300 rounded shadow-lg z-50">
           {filteredCategories.map((category) => (
             <button
               key={category}

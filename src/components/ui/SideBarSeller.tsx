@@ -1,10 +1,13 @@
 import { FC } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SidebarLink } from "../../types/side-bar-link";
 import { cn } from "../../lib/utils";
 import Mode from "./Mode";
 import UserProfile from "./UserProfile";
 import { useUser } from "../../context/UserContext";
+import { authService } from "../../services/auth";
+import { Notification } from "../ui/Notification"; // Import Notification component
+import { useNotification } from "../../hooks/useNotification"; // Import useNotification hook
 
 const sidebarLinks: SidebarLink[] = [
   {
@@ -13,7 +16,6 @@ const sidebarLinks: SidebarLink[] = [
     label: "RFQs",
     href: "/rfq-seller",
   },
-
   {
     activeIcon: "/icons/bid-active.svg",
     passiveIcon: "/icons/bid-passive.svg",
@@ -24,9 +26,8 @@ const sidebarLinks: SidebarLink[] = [
     activeIcon: "/icons/product-active.svg",
     passiveIcon: "/icons/product-passive.svg",
     label: "Product",
-    href: "/product",
+    href: "/products",
   },
-
   {
     activeIcon: "/icons/subscribe-active.svg",
     passiveIcon: "/icons/subscribe-passive.svg",
@@ -55,9 +56,37 @@ const mockUser = {
 const SidebarSeller: FC = () => {
   const { fullName, token } = useUser();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { notification, showNotification, hideNotification } =
+    useNotification(); // Initialize notification hook
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      showNotification("success", "Logout successful!"); // Show success toast
+      navigate("/login");
+    } catch (error: any) {
+      console.error("Logout failed", error);
+      showNotification(
+        "error",
+        error.message || "Logout failed. Please try again."
+      ); // Show error toast
+    }
+  };
 
   return (
-    <aside className="sidebar w-72 bg-transparent h-screen p-4">
+    <aside className="sidebar w-72 bg-transparent h-screen p-4 relative">
+      {/* Notification Toast */}
+      {notification && (
+        <div className="absolute top-4 right-4 z-50">
+          <Notification
+            type={notification.type}
+            message={notification.message}
+            onClose={hideNotification}
+          />
+        </div>
+      )}
+
       <div className="mb-8 text-center flex flex-col items-center">
         <img src="/icons/logo.svg" alt="TradeBridgeSolutions" className="h-8" />
         <p className="font-bold text-black">TradeBridgeSolutions</p>
@@ -67,7 +96,7 @@ const SidebarSeller: FC = () => {
         {sidebarLinks.map((link) => {
           const isActive =
             location.pathname.startsWith(link.href) ||
-            (location.pathname === "/" && link.href === "/rfqs");
+            (location.pathname === "/" && link.href === "/rfq-seller");
           const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 
           return (
@@ -113,11 +142,14 @@ const SidebarSeller: FC = () => {
         <Mode />
         <UserProfile
           user={{
-            name: fullName || "Anonymous User",
+            name: fullName || mockUser.name,
             avatar: mockUser.avatar || "/place_holder/default-avatar.jpg",
           }}
         />
-        <button className="rounded-md w-full px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold">
+        <button
+          className="rounded-md w-full px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold"
+          onClick={handleLogout}
+        >
           Logout
         </button>
       </div>

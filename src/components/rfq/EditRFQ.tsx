@@ -25,6 +25,7 @@ const EditRFQ: React.FC = () => {
     auctionDoc: null,
     guidelineDoc: null,
     deadline: "",
+    state: "",
   });
   const [errors, setErrors] = useState({
     title: "",
@@ -62,6 +63,7 @@ const EditRFQ: React.FC = () => {
             auctionDoc: rfqData.auctionDoc || null, // String URL from backend
             guidelineDoc: rfqData.guidelineDoc || null, // String URL from backend
             deadline,
+            state: rfqData.state || "",
           });
         } else {
           throw new Error("Invalid RFQ ID");

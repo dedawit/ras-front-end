@@ -78,57 +78,56 @@ const RFQListSeller: FC<RFQListProps> = ({
         ) : (
           <p className="text-center text-gray-500">No RFQs found</p>
         )}
-      </div>
+        {/* Pagination Controls */}
+        {totalItems > itemsPerPage && (
+          <div className="flex justify-center items-center space-x-2 mt-4">
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-primary-color text-white hover:bg-blue-700"
+              }`}
+            >
+              Previous
+            </button>
 
-      {/* Pagination Controls */}
-      {totalItems > itemsPerPage && (
-        <div className="flex justify-center items-center space-x-2 mt-4">
-          {/* Previous Button */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-md ${
-              currentPage === 1
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-primary-color text-white hover:bg-blue-700"
-            }`}
-          >
-            Previous
-          </button>
+            {/* Page Numbers */}
+            <div className="flex space-x-1">
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === page
+                        ? "bg-primary-color text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+            </div>
 
-          {/* Page Numbers */}
-          <div className="flex space-x-1">
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 rounded-md ${
-                    currentPage === page
-                      ? "bg-primary-color text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  {page}
-                </button>
-              )
-            )}
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-primary-color text-white hover:bg-blue-700"
+              }`}
+            >
+              Next
+            </button>
           </div>
-
-          {/* Next Button */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md ${
-              currentPage === totalPages
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-primary-color text-white hover:bg-blue-700"
-            }`}
-          >
-            Next
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

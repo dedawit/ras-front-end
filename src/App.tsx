@@ -24,6 +24,9 @@ import PaymentSuccessPage from "./components/transaction/PaymentSuccess";
 import TransactionHistoryBuyer from "./components/transaction/TransactionHistoryBuyer";
 import ViewTransaction from "./components/transaction/ViewTransaction";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { ProductDashboard } from "./components/product/ProductDashboard";
+import { ProductForm } from "./components/product/ProductForm";
+import EditProductCard from "./components/product/EditProduct";
 
 const App: React.FC = () => {
   return (
@@ -87,7 +90,7 @@ const App: React.FC = () => {
             path="/transactions/view/:id"
             element={
               <ProtectedRoute
-                roles={["buyer"]}
+                roles={["buyer", "seller"]}
                 component={<ViewTransaction />}
               />
             }
@@ -140,11 +143,37 @@ const App: React.FC = () => {
 
           {/* Routes for Both Buyer and Seller */}
           <Route
-            path="/transaction"
+            path="/transactions/make"
             element={
               <ProtectedRoute
-                roles={["buyer", "seller"]}
+                roles={["buyer"]}
                 component={<TransactionPage />}
+              />
+            }
+          />
+
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute
+                roles={["seller"]}
+                component={<ProductDashboard />}
+              />
+            }
+          />
+          <Route
+            path="/products/create-product"
+            element={
+              <ProtectedRoute roles={["seller"]} component={<ProductForm />} />
+            }
+          />
+
+          <Route
+            path="products/edit-product/:productId"
+            element={
+              <ProtectedRoute
+                roles={["seller"]}
+                component={<EditProductCard />}
               />
             }
           />

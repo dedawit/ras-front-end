@@ -87,14 +87,13 @@ export const bidService = {
       });
       return response.data.sort(
         (a: Bid, b: Bid) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
     } catch (error) {
       console.error("Error fetching Bids for RFQ:", error);
       throw handleApiError(error);
     }
   },
-
   /**
    * Get all Bids created by a seller
    */

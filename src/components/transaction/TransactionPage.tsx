@@ -35,15 +35,28 @@ const TransactionPage: React.FC = () => {
   });
 
   useEffect(() => {
+    const fetchTransactionId = async () => {
+      if (!userId) return;
+
+      try {
+        const generatedId = await transactionService.generateTransactionId(
+          userId
+        );
+        setTransactionData((prev) => ({
+          ...prev,
+          transactionId: generatedId,
+        }));
+      } catch (error) {
+        console.error("Failed to generate transaction ID:", error);
+        showNotification(
+          "error",
+          "Failed to generate transaction ID. Please enter manually."
+        );
+      }
+    };
+
     if (location.state?.bid) {
       const { bid } = location.state;
-      console.log("Received bid data:", bid); // Debug log
-      //   if (!bid.id || !isValidUUID(bid.id)) {
-      //     console.error("Invalid or missing bid ID:", bid.id);
-      //     showNotification("error", "Invalid bid ID. Please try again.");
-      //     navigate("/bids");
-      //     return;
-      //   }
       setTransactionData((prev) => ({
         ...prev,
         projectName: bid.projectName || "",
@@ -51,12 +64,12 @@ const TransactionPage: React.FC = () => {
         totalPrice: Number(bid.totalPrice) || 0,
         bidId: bid.id,
       }));
+
+      fetchTransactionId(); // Generate ID when bid data is available
     } else {
-      console.error("No bid data found in location.state");
-      showNotification("error", "Bid data is missing. Please try again.");
       navigate("/bids");
     }
-  }, [location.state, navigate, showNotification]);
+  }, [location.state, navigate, showNotification, userId]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,

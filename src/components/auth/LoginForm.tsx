@@ -40,6 +40,7 @@ export const LoginForm: React.FC = () => {
 
       try {
         const response = await authService.login(formData);
+        console.log("Login response:", response);
         const { accessToken, refreshToken, firstName, lastName, id, lastRole } =
           response;
         const fullName = `${firstName} ${lastName}`;

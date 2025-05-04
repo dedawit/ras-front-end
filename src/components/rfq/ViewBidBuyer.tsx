@@ -8,6 +8,7 @@ import { Notification } from "../ui/Notification";
 import { Bid, BidItem } from "../../types/bid";
 import { bidService } from "../../services/bid";
 import AwardButton from "../ui/AwardButton";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 const ViewBid: React.FC = () => {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ const ViewBid: React.FC = () => {
 
   const handleMakeTransaction = () => {
     if (formData) {
-      navigate("/transaction", {
+      navigate("/transactions/make", {
         state: {
           bid: {
             id: id,
@@ -172,7 +173,8 @@ const ViewBid: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium">Items</h3>
                   <p className="text-primary-color font-semibold">
-                    Total Bid: ETB: {formData.totalPrice || 0}
+                    Total Bid: ETB{" "}
+                    {formatNumberWithCommas(Number(formData.totalPrice))}
                   </p>
                 </div>
 
@@ -197,13 +199,29 @@ const ViewBid: React.FC = () => {
                               <td className="p-2 border">{item.item}</td>
                               <td className="p-2 border">{item.quantity}</td>
                               <td className="p-2 border">{item.unit}</td>
-                              <td className="p-2 border">{item.singlePrice}</td>
                               <td className="p-2 border">
-                                {item.transportFee || 0}
+                                ETB{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.singlePrice)
+                                )}
                               </td>
-                              <td className="p-2 border">{item.taxes || 0}</td>
                               <td className="p-2 border">
-                                ETB:{item.totalPrice}
+                                ETB{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.transportFee || 0)
+                                )}
+                              </td>
+                              <td className="p-2 border">
+                                ETB{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.taxes || 0)
+                                )}
+                              </td>
+                              <td className="p-2 border">
+                                ETB{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.totalPrice)
+                                )}
                               </td>
                             </tr>
                           )

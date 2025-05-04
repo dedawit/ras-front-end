@@ -64,13 +64,15 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
               width="200px"
               onClick={handleViewClick}
             />
-            <Button2
-              icon={"icons/edit.svg"}
-              text="Edit"
-              textClassName="sm:block hidden"
-              width="200px"
-              onClick={handleEditClick}
-            />
+            {rfq.state?.toLowerCase() === "opened" && (
+              <Button2
+                icon={"icons/edit.svg"}
+                text="Edit"
+                textClassName="sm:block hidden"
+                width="200px"
+                onClick={handleEditClick}
+              />
+            )}
             <Button2
               icon={"icons/quote.svg"}
               text="View Quotes"
