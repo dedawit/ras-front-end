@@ -1,13 +1,30 @@
 import React from "react";
 
-const SubmitButton: React.FC = () => {
+interface SubmitButtonProps {
+  isLoading?: boolean;
+  text?: string;
+  loadingText?: string;
+}
+
+const SubmitButton: React.FC<SubmitButtonProps> = ({
+  isLoading = false,
+  text = "Post RFQ",
+  loadingText = "Posting RFQ...",
+}) => {
   return (
-    <button
-      type="submit"
-      className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
-    >
-      Post RFQ
-    </button>
+    <div className="flex justify-end">
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`max-w-64 p-3 text-white rounded-lg shadow-md transition-all duration-300 ${
+          isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
+      >
+        {isLoading ? loadingText : text}
+      </button>
+    </div>
   );
 };
 

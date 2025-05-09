@@ -1,8 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Logo: React.FC = () => {
   return (
-    <div className="position-fixed top-0 start-0 p-2 bg-brand d-flex w-full">
+    <Link
+      to="/"
+      className="position-fixed top-0 start-0 p-2 bg-brand d-flex w-full text-decoration-none"
+    >
       <img
         src="/icons/logo.svg"
         alt="Building Icon"
@@ -13,6 +17,6 @@ export const Logo: React.FC = () => {
       <span className="text-dark text-xl font-bold ms-2">
         TradeBrigeSolutions
       </span>
-    </div>
+    </Link>
   );
 };

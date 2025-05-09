@@ -19,13 +19,9 @@ export const SellerRFQForm: React.FC = () => {
   const [selectedCategory, setSelectedCategory] =
     useState<string>("All Categories");
 
-  const handlePostRFQ = () => {
-    navigate("/rfqs/post-rfq");
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-auto">
         {" "}
         {/* Prevents full-page scrolling */}
         <SidebarSeller />
@@ -42,21 +38,6 @@ export const SellerRFQForm: React.FC = () => {
               width="w-full"
               value={selectedCategory}
               onChange={(category) => setSelectedCategory(category)}
-            />
-          </div>
-          <div className="px-4 mt-4 large-header">
-            <Button2
-              icon={"icons/plus.svg"}
-              text="Post RFQ"
-              onClick={handlePostRFQ}
-            />
-          </div>
-          <div className="px-4 mt-4 mobile-header">
-            <Button2
-              icon={"icons/plus.svg"}
-              text="Post RFQ"
-              onClick={handlePostRFQ}
-              width="w-full"
             />
           </div>
 

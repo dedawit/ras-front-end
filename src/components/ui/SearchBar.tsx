@@ -4,14 +4,19 @@ import { RiSearchLine } from "react-icons/ri";
 interface SearchBarProps {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  placeholder?: string;
 }
 
-const SearchBar: FC<SearchBarProps> = ({ searchTerm, setSearchTerm }) => {
+const SearchBar: FC<SearchBarProps> = ({
+  searchTerm,
+  setSearchTerm,
+  placeholder = "Search RFQ...",
+}) => {
   return (
     <div className="relative flex-1 w-full hidden md:block">
       <input
         type="text"
-        placeholder="Search RFQ..."
+        placeholder={placeholder}
         className="w-full px-4 py-2 pr-12 bg-select-background transparent-search-bg border rounded-full focus:outline-none focus:ring-2 focus:ring-primary/50"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

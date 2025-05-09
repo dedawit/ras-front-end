@@ -1,12 +1,18 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-type UserContextType = {
+export interface UserContextType {
   token: string | null;
   fullName: string | null;
-  id: string | null; // Allow id to be string or null
-  setUser: (user: { token: string; fullName: string; id: string }) => void; // Include id in the setUser method
+  id: string | null;
+  lastRole: string | null;
+  setUser: (user: {
+    token: string;
+    fullName: string;
+    id: string;
+    lastRole: string;
+  }) => void;
   clearUser: () => void;
-};
+}
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
@@ -14,20 +20,23 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("authToken")
+    localStorage.getItem("accessToken")
   );
   const [fullName, setFullName] = useState<string | null>(() =>
     localStorage.getItem("fullName")
   );
   const [id, setId] = useState<string | null>(() =>
     localStorage.getItem("userId")
-  ); // State for id
+  );
+  const [lastRole, setLastRole] = useState<string | null>(() =>
+    localStorage.getItem("lastRole")
+  );
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem("token", token);
+      localStorage.setItem("accessToken", token);
     } else {
-      localStorage.removeItem("token");
+      localStorage.removeItem("accessToken");
     }
 
     if (fullName) {
@@ -37,29 +46,46 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     if (id) {
-      localStorage.setItem("userId", id); // Store id in localStorage
+      localStorage.setItem("userId", id);
     } else {
       localStorage.removeItem("userId");
     }
-  }, [token, fullName, id]);
 
-  const setUser = (user: { token: string; fullName: string; id: string }) => {
+    if (lastRole) {
+      localStorage.setItem("lastRole", lastRole);
+    } else {
+      localStorage.removeItem("lastRole");
+    }
+  }, [token, fullName, id, lastRole]);
+
+  const setUser = (user: {
+    token: string;
+    fullName: string;
+    id: string;
+    lastRole: string;
+  }) => {
     setToken(user.token);
     setFullName(user.fullName);
-    setId(user.id); // Set the id when user logs in
+    setId(user.id);
+    setLastRole(user.lastRole);
   };
 
   const clearUser = () => {
     setToken(null);
     setFullName(null);
-    setId(null); // Clear the id when user logs out
-    localStorage.removeItem("authToken");
+    setId(null);
+    setLastRole(null);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("fullName");
-    localStorage.removeItem("userId"); // Remove id from localStorage
+    localStorage.removeItem("userId");
+    localStorage.removeItem("lastRole");
   };
 
   return (
-    <UserContext.Provider value={{ token, fullName, id, setUser, clearUser }}>
+    <UserContext.Provider
+      value={{ token, fullName, id, lastRole, setUser, clearUser }}
+    >
       {children}
     </UserContext.Provider>
   );

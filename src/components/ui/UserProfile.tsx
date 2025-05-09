@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { User } from "../../types/user";
+import { FaUserCircle } from "react-icons/fa";
 interface UserProfileProps {
   user: User;
 }
@@ -7,10 +8,10 @@ interface UserProfileProps {
 const UserProfile: FC<UserProfileProps> = ({ user }) => {
   return (
     <div className="flex flex-col items-start px-4 py-2 space-y-3 my-2">
-      <img
-        src={user.avatar}
-        alt={user.name}
-        className="w-28 h-28 rounded-full object-cover"
+      <FaUserCircle
+        className="w-28 h-28 rounded-full text-gray-400"
+        title={user.name}
+        aria-label={`Profile picture for ${user.name}`}
       />
       <div>
         <h3 className="font-bold text-gray-900">{user.name}</h3>

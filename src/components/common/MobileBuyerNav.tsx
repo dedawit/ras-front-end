@@ -46,7 +46,7 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
   const { fullName } = useUser();
 
   return (
-    <div className="relative h-full  bg-brand">
+    <div className="mobile-header relative h-full  bg-brand">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full p-4 bg-transparent mobile-header">
         {/* Hamburger Menu Icon */}

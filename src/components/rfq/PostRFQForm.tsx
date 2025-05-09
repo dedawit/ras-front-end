@@ -1,48 +1,85 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormField from "../common/FormField";
 import FileUpload from "../common/FileUpload";
 import CategorySelect from "../ui/CategorySelect";
 import SubmitButton from "../common/SubmitButton";
 import { RFQ } from "../../types/rfq";
 import Sidebar from "../ui/SideBar";
-import { rfqService } from "../../services/rfq"; // Import the RFQ service
-import { useUser } from "./../../context/UserContext"; // Import the UserContext
+import { rfqService } from "../../services/rfq";
+import { useUser } from "./../../context/UserContext";
 import MobileHeader from "../ui/MobileHeader";
-import { Spinner } from "../ui/Spinner"; // Import the Spinner component
+import { Spinner } from "../ui/Spinner";
 import { useNavigate } from "react-router-dom";
 import Footer from "../ui/Footer";
+import { useNotification } from "../../hooks/useNotification";
+import { Notification } from "../ui/Notification";
 
 const PostRFQ: React.FC = () => {
-  const { id: userId } = useUser(); // Get user info from the context
+  const { id: userId } = useUser();
   const [formData, setFormData] = useState<RFQ>({
     id: "",
-    productName: "",
+    title: "",
+    projectName: "",
+    purchaseNumber: "",
     category: "Electronics and Electrical Equipment",
     quantity: "",
     detail: "",
-    file: null,
+    auctionDoc: null,
+    guidelineDoc: null,
     deadline: "",
   });
 
   const [errors, setErrors] = useState({
-    productName: "",
+    title: "",
+    projectName: "",
+    purchaseNumber: "",
     quantity: "",
-    deadline: "", // Add expiryDate error
+    detail: "",
+    auctionDoc: "",
+    guidelineDoc: "",
+    deadline: "",
   });
+  const { notification, showNotification, hideNotification } =
+    useNotification();
 
-  const [showExpiryDate, setShowExpiryDate] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // State for loading spinner
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  // Fetch generated purchase number on mount
+  useEffect(() => {
+    const fetchPurchaseNumber = async () => {
+      if (!userId) {
+        console.error("User ID not available");
+        return;
+      }
+      try {
+        const purchaseNumber = await rfqService.getGeneratedPurchaseNumber(
+          userId
+        );
+        setFormData((prev) => ({ ...prev, purchaseNumber }));
+      } catch (error) {
+        console.error("Failed to fetch purchase number:", error);
+        showNotification("error", "Failed to load purchase number.");
+      }
+    };
+
+    fetchPurchaseNumber();
+  }, [userId, showNotification]);
 
   const validateForm = (): boolean => {
     const newErrors: any = {};
-    if (!formData.productName)
-      newErrors.productName = "Product name is required";
+    if (!formData.title) newErrors.title = "Title is required";
+    if (!formData.projectName)
+      newErrors.projectName = "Project name is required";
+    if (!formData.purchaseNumber)
+      newErrors.purchaseNumber = "Purchase number is required";
     if (!formData.quantity) newErrors.quantity = "Quantity is required";
 
-    if (showExpiryDate && !formData.deadline) {
-      newErrors.deadline = "Deadline is required when Set Deadline is selected";
-    }
+    if (!formData.auctionDoc)
+      newErrors.auctionDoc = "Auction document is required";
+    if (!formData.guidelineDoc)
+      newErrors.guidelineDoc = "Guideline document is required";
+    if (!formData.deadline)
+      newErrors.deadline = "Deadline date and time are required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -52,77 +89,116 @@ const PostRFQ: React.FC = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       try {
-        // Ensure the user is logged in and has a buyerId
         if (!userId) {
           console.error("User not logged in or invalid user ID");
           return;
         }
 
-        // Get buyerId from user context
         const buyerId = userId;
-
-        // Prepare the RFQ data
         const rfqData = {
-          productName: formData.productName,
-          quantity: Number(formData.quantity),
+          title: formData.title,
+          projectName: formData.projectName,
+          purchaseNumber: formData.purchaseNumber,
           category: formData.category,
+          quantity: Number(formData.quantity),
           detail: formData.detail,
-          deadline: formData.deadline ? new Date(formData.deadline) : undefined,
-          file: formData.file,
+          auctionDoc:
+            formData.auctionDoc instanceof File ? formData.auctionDoc : null,
+          guidelineDoc:
+            formData.guidelineDoc instanceof File
+              ? formData.guidelineDoc
+              : null,
+          deadline: new Date(formData.deadline || ""),
         };
 
-        // Call the service to create the RFQ
         const response = await rfqService.createRFQ(buyerId, rfqData);
-        navigate("/rfqs"); // Redirect to RFQ list after successful post
-
+        showNotification("success", "RFQ created successfully!");
+        navigate("/rfqs");
         console.log("RFQ created successfully:", response);
-
-        // Handle success (e.g., show success notification or redirect)
       } catch (err: any) {
+        showNotification(
+          "error",
+          err.message || "Failed to create RFQ. Please try again."
+        );
         console.error("Error creating RFQ:", err);
-        // Handle error (e.g., show error notification)
       } finally {
-        setIsLoading(false); // Stop loading
+        setIsLoading(false);
       }
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, file: e.target.files[0] });
-    }
-  };
+  const handleFileChange =
+    (field: "auctionDoc" | "guidelineDoc") =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+        setFormData({ ...formData, [field]: e.target.files[0] });
+      }
+    };
 
   return (
     <div className="flex h-screen bg-transparent w-full overflow-x-hidden">
       <Sidebar />
-      <div className="flex-1 flex flex-col w-full">
+      <div className="flex-1 flex flex-col w-full overflow-y-auto">
         <MobileHeader showSearchIcon={false} />
+        {/* Notification Display */}
+        {notification && (
+          <Notification
+            type={notification.type}
+            message={notification.message}
+            onClose={hideNotification}
+          />
+        )}
 
-        <div className="mt-8 sm:mt-24  md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
+        <div className=" mt-4 sm:mt-24 md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
           <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
             Post RFQ
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Product Name Field */}
-            <FormField label="Product Name" required>
+            <FormField label="Title" required>
               <input
                 type="text"
                 className="p-2 border rounded-md w-full sm:w-96"
-                value={formData.productName}
+                value={formData.title}
                 onChange={(e) =>
-                  setFormData({ ...formData, productName: e.target.value })
+                  setFormData({ ...formData, title: e.target.value })
                 }
               />
-              {errors.productName && (
-                <p className="text-red-500 text-sm">{errors.productName}</p>
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title}</p>
               )}
             </FormField>
 
-            {/* Category Field */}
+            <FormField label="Project Name" required>
+              <input
+                type="text"
+                className="p-2 border rounded-md w-full sm:w-96"
+                value={formData.projectName}
+                onChange={(e) =>
+                  setFormData({ ...formData, projectName: e.target.value })
+                }
+              />
+              {errors.projectName && (
+                <p className="text-red-500 text-sm">{errors.projectName}</p>
+              )}
+            </FormField>
+
+            <FormField label="Purchase Number" required>
+              <input
+                type="text"
+                className="p-2 border rounded-md w-full sm:w-96"
+                value={formData.purchaseNumber}
+                onChange={(e) =>
+                  setFormData({ ...formData, purchaseNumber: e.target.value })
+                }
+              />
+              {errors.purchaseNumber && (
+                <p className="text-red-500 text-sm">{errors.purchaseNumber}</p>
+              )}
+            </FormField>
+
             <FormField label="Category" required>
               <CategorySelect
                 width="w-full"
@@ -130,11 +206,10 @@ const PostRFQ: React.FC = () => {
                 onChange={(value) =>
                   setFormData({ ...formData, category: value })
                 }
-                excludeAllCategories={true} // Hide "All Categories"
+                excludeAllCategories={true}
               />
             </FormField>
 
-            {/* Quantity Field */}
             <FormField label="Quantity" required>
               <input
                 type="number"
@@ -152,7 +227,37 @@ const PostRFQ: React.FC = () => {
               )}
             </FormField>
 
-            {/* Details Field */}
+            <FormField label="Auction Document" required>
+              <div className="flex flex-col space-y-2">
+                <FileUpload onChange={handleFileChange("auctionDoc")} />
+                {errors.auctionDoc && (
+                  <p className="text-red-500 text-sm">{errors.auctionDoc}</p>
+                )}
+              </div>
+            </FormField>
+
+            <FormField label="Guideline Document" required>
+              <div className="flex flex-col space-y-2">
+                <FileUpload onChange={handleFileChange("guidelineDoc")} />
+                {errors.guidelineDoc && (
+                  <p className="text-red-500 text-sm">{errors.guidelineDoc}</p>
+                )}
+              </div>
+            </FormField>
+
+            <FormField label="Deadline" required>
+              <input
+                type="datetime-local" // Changed from "date" to "datetime-local"
+                className="w-full sm:w-96 p-2 border rounded-md"
+                value={formData.deadline || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, deadline: e.target.value })
+                }
+              />
+              {errors.deadline && (
+                <p className="text-red-500 text-sm">{errors.deadline}</p>
+              )}
+            </FormField>
             <FormField label="Details">
               <textarea
                 className="w-full sm:w-96 p-2 border rounded-md h-24"
@@ -163,45 +268,6 @@ const PostRFQ: React.FC = () => {
               />
             </FormField>
 
-            {/* File Upload Field */}
-            <FormField label="File :  (Max size: 10MB, types: jpg, jpeg, png, pdf, docx, doc, xlsx, xls)">
-              <FileUpload onChange={handleFileChange} />
-            </FormField>
-
-            {/* Expiry Date Checkbox */}
-            <FormField label=" ">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="set-expiry-date"
-                  className="mr-2"
-                  checked={showExpiryDate}
-                  onChange={(e) => setShowExpiryDate(e.target.checked)}
-                />
-                <label htmlFor="set-expiry-date" className="text-sm">
-                  Set Deadline
-                </label>
-              </div>
-            </FormField>
-
-            {/* Deadline Input (Visible when checked) */}
-            {showExpiryDate && (
-              <FormField label="Deadline" required>
-                <input
-                  type="date"
-                  className="w-full sm:w-96 p-2 border rounded-md"
-                  value={formData.deadline}
-                  onChange={(e) =>
-                    setFormData({ ...formData, deadline: e.target.value })
-                  }
-                />
-                {errors.deadline && (
-                  <p className="text-red-500 text-sm">{errors.deadline}</p>
-                )}
-              </FormField>
-            )}
-
-            {/* Submit Button with Spinner */}
             <button
               className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
               type="submit"

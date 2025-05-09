@@ -1,9 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import RFQCard from "./RFQCard";
+import RFQCardSeller from "./RFQCardSeller";
 import { RFQ } from "../../types/rfq";
 import { rfqService } from "../../services/rfq";
 import { Spinner } from "../ui/Spinner";
-import RFQCardSeller from "./RFQCardSeller";
 
 interface RFQListProps {
   sellerId: any;
@@ -18,15 +17,15 @@ const RFQListSeller: FC<RFQListProps> = ({
 }) => {
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1); // Current page state
-  const itemsPerPage = 10; // 10 items per page
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchRFQs = async () => {
       try {
         setLoading(true);
         const data = await rfqService.getRFQsSeller(sellerId);
-        setRfqs(data.reverse()); // Reverse to show newest first (assuming this aligns with createdAt sorting)
+        setRfqs(data); // Reverse to show newest first
       } catch (error) {
         console.error("Failed to load RFQs:", error);
       } finally {
@@ -42,7 +41,7 @@ const RFQListSeller: FC<RFQListProps> = ({
     const matchesCategory =
       selectedCategory === "All Categories" ||
       rfq.category === selectedCategory;
-    const matchesSearch = rfq.productName
+    const matchesSearch = rfq.purchaseNumber
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
@@ -79,57 +78,56 @@ const RFQListSeller: FC<RFQListProps> = ({
         ) : (
           <p className="text-center text-gray-500">No RFQs found</p>
         )}
-      </div>
+        {/* Pagination Controls */}
+        {totalItems > itemsPerPage && (
+          <div className="flex justify-center items-center space-x-2 mt-4">
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-primary-color text-white hover:bg-blue-700"
+              }`}
+            >
+              Previous
+            </button>
 
-      {/* Pagination Controls */}
-      {totalItems > itemsPerPage && (
-        <div className="flex justify-center items-center space-x-2 mt-4">
-          {/* Previous Button */}
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 rounded-md ${
-              currentPage === 1
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-primary-color text-white hover:bg-blue-700"
-            }`}
-          >
-            Previous
-          </button>
+            {/* Page Numbers */}
+            <div className="flex space-x-1">
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map(
+                (page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-1 rounded-md ${
+                      currentPage === page
+                        ? "bg-primary-color text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+            </div>
 
-          {/* Page Numbers */}
-          <div className="flex space-x-1">
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-              (page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 rounded-md ${
-                    currentPage === page
-                      ? "bg-primary-color text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  {page}
-                </button>
-              )
-            )}
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === totalPages
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-primary-color text-white hover:bg-blue-700"
+              }`}
+            >
+              Next
+            </button>
           </div>
-
-          {/* Next Button */}
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 rounded-md ${
-              currentPage === totalPages
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-primary-color text-white hover:bg-blue-700"
-            }`}
-          >
-            Next
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

@@ -1,29 +1,31 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import MobileBuyerNav from "../common/MobileBuyerNav";
+import MobileSellerNav from "../common/MobileSellerNav";
 import { LogoInside } from "../common/LogoInside";
-import SearchBox from "./../ui/SearchBox"; // Import SearchBox component
+import SearchBox from "../ui/SearchBox";
+import { useUser } from "../../context/UserContext";
 
 interface MobileHeaderProps {
   searchTerm?: string;
-  setSearchTerm?: any;
-  showSearchIcon?: boolean; // Optional prop to control visibility of search icon
+  setSearchTerm?: React.Dispatch<React.SetStateAction<string>>;
+  showSearchIcon?: boolean;
+  placeholder?: string;
 }
 
-const MobileHeader: React.FC<MobileHeaderProps> = ({
+const MobileHeader: FC<MobileHeaderProps> = ({
   searchTerm = "",
   setSearchTerm,
-
-  showSearchIcon = true, // Default value for visibility
+  showSearchIcon = true,
+  placeholder = "Search RFQ...",
 }) => {
+  const { lastRole } = useUser();
   const [isNavVisible, setIsNavVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
-  // Toggle the mobile navigation menu
   const toggleNav = () => {
     setIsNavVisible((prev) => !prev);
   };
 
-  // Toggle the search box visibility
   const toggleSearch = () => {
     setIsSearchVisible((prev) => !prev);
   };
@@ -33,6 +35,8 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       setSearchTerm(newSearchTerm);
     }
   };
+
+  const NavComponent = lastRole === "seller" ? MobileSellerNav : MobileBuyerNav;
 
   return (
     <div>
@@ -64,7 +68,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
               src="icons/search.svg"
               alt="Search"
               className="w-6 h-6 cursor-pointer"
-              onClick={toggleSearch} // Toggle search visibility
+              onClick={toggleSearch}
             />
           </div>
         )}
@@ -73,24 +77,25 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
       {/* Search Box */}
       <SearchBox
         isVisible={isSearchVisible}
-        onToggle={toggleSearch} // Pass the toggleSearch function to close the search box
-        searchTerm={searchTerm} // Pass searchTerm to SearchBox
-        setSearchTerm={setSearchTerm} // Pass setSearchTerm to SearchBox
+        onToggle={toggleSearch}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        placeholder={placeholder}
       />
 
-      {/* Mobile Buyer Navigation (conditionally rendered) */}
+      {/* Mobile Navigation */}
       <div
-        className={`fixed inset-0 z-50 bg-white shadow-lg transition-transform duration-300 ${
+        className={`fixed inset-0 z-50 bg-white shadow-lg transition-transform duration-300 mobile-header ${
           isNavVisible ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <MobileBuyerNav onClose={toggleNav} />
+        <NavComponent onClose={toggleNav} />
       </div>
 
       {/* Overlay */}
       {isNavVisible && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 mobile-header"
           onClick={toggleNav}
         ></div>
       )}
