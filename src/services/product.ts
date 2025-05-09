@@ -124,4 +124,18 @@ export const productService = {
       throw handleApiError(error);
     }
   },
+
+  /**
+   * Retrieves all products for public view (no authentication)
+   */
+  async getPublicProducts(): Promise<Product[]> {
+    try {
+      const response = await axios.get("/product/view-all-public");
+      console.log("Fetched public products:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching public products:", error);
+      throw handleApiError(error);
+    }
+  },
 };

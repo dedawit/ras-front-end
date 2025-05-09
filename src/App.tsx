@@ -27,6 +27,7 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { ProductDashboard } from "./components/product/ProductDashboard";
 import { ProductForm } from "./components/product/ProductForm";
 import EditProductCard from "./components/product/EditProduct";
+import Landing from "./components/landing/Landing";
 
 const App: React.FC = () => {
   return (
@@ -34,7 +35,8 @@ const App: React.FC = () => {
       <UserProvider>
         <Routes>
           {/* Unprotected Routes */}
-          <Route path="/" element={<CreateAccountForm />} />
+          <Route path="/create-account" element={<CreateAccountForm />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/payment-success" element={<PaymentSuccessPage />} />
 
