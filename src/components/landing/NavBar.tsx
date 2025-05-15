@@ -20,10 +20,11 @@ const Navbar: React.FC<NavbarProps> = ({
   onLoginClick,
 }) => {
   return (
-    <header className=" shadow-md">
-      {/* Top Bar with Logo */}
-      <div className="flex items-center justify-between p-4 bg-brand">
-        <div className="flex items-center">
+    <header className="shadow-md w-full">
+      {/* Top Bar with Logo and Login */}
+      <div className="flex flex-col sm:flex-row items-center justify-between p-4 bg-brand gap-4 sm:gap-0">
+        {/* Logo */}
+        <div className="flex items-center justify-center sm:justify-start">
           <img
             src="/icons/logo.svg"
             alt="Building Icon"
@@ -31,15 +32,17 @@ const Navbar: React.FC<NavbarProps> = ({
             height="auto"
             style={{ objectFit: "contain" }}
           />
-          <span className="text-dark text-2xl font-bold ms-2">
+          <span className="text-dark text-2xl font-bold ms-2 whitespace-nowrap">
             TradeBrigeSolutions
           </span>
         </div>
+
+        {/* Login Button */}
         <motion.button
           onClick={onLoginClick}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className=" px-4 py-2 bg-blue-600 text-white rounded-md flex items-center justify-center gap-2 transition duration-300 hover:bg-blue-700 shadow-md"
+          className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-md flex items-center justify-center gap-2 transition duration-300 hover:bg-blue-700 shadow-md"
         >
           <FaSignInAlt className="text-lg" />
           <span className="font-semibold">Login</span>

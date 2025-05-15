@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div
-      className="max-w-[300px] h-[360px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-1 border border-gray-200"
+      className="max-w-[300px] rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-xl transition-transform duration-300 transform hover:-translate-y-1 border border-gray-200 flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -40,17 +40,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
 
       {/* Content Container */}
-      <div className="p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 leading-snug">
+      <div className="p-4 flex flex-col gap-2 flex-grow">
+        <h3 className="text-lg font-semibold text-gray-800 leading-snug line-clamp-2">
           {product.title}
         </h3>
 
-        <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed h-12">
+        <p className="text-gray-600 text-sm leading-relaxed">
           {product.detail || "No details provided"}
         </p>
 
+        {/* Spacer to push the button down */}
+        <div className="flex-grow" />
+
         {/* Edit Button */}
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-2">
           <button
             onClick={handleEdit}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition"
