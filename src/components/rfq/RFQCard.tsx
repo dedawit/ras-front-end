@@ -41,7 +41,7 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
     <div className="bg-white rounded-lg border-color p-4 space-y-4 shadow-sm">
       {/* Title, Purchase Number and Actions */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-        <div className="space-y-1">
+        <div className="flex-1 min-w-[50%] space-y-1">
           <h3 className="sm:text-2xl font-extrabold text:sm">
             {rfq.purchaseNumber}
           </h3>

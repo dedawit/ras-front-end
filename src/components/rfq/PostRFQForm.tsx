@@ -267,20 +267,27 @@ const PostRFQ: React.FC = () => {
                 }
               />
             </FormField>
-
-            <button
-              className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
-              type="submit"
-            >
-              {isLoading ? (
-                <div className="flex justify-center items-center">
-                  <Spinner />
-                  <span className="ml-2">Posting RFQ...</span>
-                </div>
-              ) : (
-                "Post RFQ"
-              )}
-            </button>
+            <div className="flex justify-between mt-6">
+              <button
+                onClick={() => navigate("/rfqs")}
+                className="p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+              >
+                Back to RFQ List
+              </button>
+              <button
+                className="sm:w-[200px] p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 "
+                type="submit"
+              >
+                {isLoading ? (
+                  <div className="flex justify-center items-center">
+                    <Spinner />
+                    <span className="ml-2">Posting RFQ...</span>
+                  </div>
+                ) : (
+                  "Post RFQ"
+                )}
+              </button>
+            </div>
           </form>
         </div>
       </div>
