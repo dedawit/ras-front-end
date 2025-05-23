@@ -54,7 +54,7 @@ export const BuyerRFQForm: React.FC = () => {
               icon={"icons/plus.svg"}
               text="Post RFQ"
               onClick={handlePostRFQ}
-              width="w-full"
+              width="w-[200px]"
             />
           </div>
 
