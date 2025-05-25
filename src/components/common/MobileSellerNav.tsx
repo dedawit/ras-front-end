@@ -15,16 +15,10 @@ const sidebarLinks: SidebarLink[] = [
     href: "/rfq-seller",
   },
   {
-    activeIcon: "/icons/chat-active.svg",
-    passiveIcon: "/icons/chat-passive.svg",
-    label: "Chat",
-    href: "/chat",
-  },
-  {
     activeIcon: "/icons/bid-active.svg",
     passiveIcon: "/icons/bid-passive.svg",
     label: "Bid",
-    href: "/bid",
+    href: "/bids",
   },
   {
     activeIcon: "/icons/product-active.svg",
