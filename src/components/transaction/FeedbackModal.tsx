@@ -3,7 +3,7 @@ import { CreateFeedbackData } from "../../types/feedback";
 
 interface FeedbackModalProps {
   transactionId: string;
-  userId: string; // Added userId prop
+  userId: string;
   onClose: () => void;
   onSubmit: (feedback: CreateFeedbackData) => Promise<void>;
 }
@@ -17,11 +17,27 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
   const [comment, setComment] = useState("");
   const [star, setStar] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{
+    rating?: string;
+    comment?: string;
+    submit?: string;
+  }>({});
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!comment.trim() || star < 1 || star > 5) {
-      alert("Please provide a valid comment and star rating (1-5).");
+    setErrors({}); // Clear previous errors
+
+    // Validate inputs
+    let newErrors: { rating?: string; comment?: string } = {};
+    if (!comment.trim()) {
+      newErrors.comment = "Please provide a valid comment.";
+    }
+    if (star < 1 || star > 5) {
+      newErrors.rating = "Please select a star rating (1-5).";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -30,7 +46,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
       await onSubmit({ transactionId, createdBy: userId, comment, star });
       onClose();
     } catch (error) {
-      alert("Failed to submit feedback. Please try again.");
+      setErrors({ submit: "Failed to submit feedback. Please try again." });
     } finally {
       setIsSubmitting(false);
     }
@@ -63,6 +79,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               Rating
             </label>
             <div className="flex space-x-2">{renderStars()}</div>
+            {errors.rating && (
+              <p className="text-red-500 text-sm mt-1">{errors.rating}</p>
+            )}
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -73,9 +92,14 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Enter your feedback..."
-              required
             />
+            {errors.comment && (
+              <p className="text-red-500 text-sm mt-1">{errors.comment}</p>
+            )}
           </div>
+          {errors.submit && (
+            <p className="text-red-500 text-sm mb-4">{errors.submit}</p>
+          )}
           <div className="flex justify-end space-x-2">
             <button
               type="button"

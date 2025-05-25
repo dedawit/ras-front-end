@@ -115,7 +115,7 @@ const ViewTransaction: React.FC = () => {
         )}
 
         {!isLoading && (
-          <div className="mt-4 sm:mt-24 md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
+          <div className="mt-4 sm:mt-24 md:max-w-2xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full w-full">
             <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
               View Transaction
             </h2>
@@ -195,16 +195,16 @@ const ViewTransaction: React.FC = () => {
                   />
                 </FormField>
 
-                <div className="flex justify-between mt-6">
+                <div className="flex flex-col sm:flex-row gap-2 sm:justify-between mt-6">
                   <button
                     onClick={handleBack}
-                    className="p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                    className="w-full sm:w-auto p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
                   >
                     Back to Transaction List
                   </button>
                   <button
                     onClick={() => setIsFeedbackModalOpen(true)}
-                    className="p-3 bg-primary-color text-white rounded-md hover:bg-blue-700"
+                    className="w-full sm:w-auto p-3 bg-primary-color text-white rounded-md hover:bg-blue-700"
                   >
                     Add Feedback
                   </button>
