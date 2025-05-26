@@ -11,6 +11,7 @@ import { Notification } from "../ui/Notification";
 import { FaTrash } from "react-icons/fa";
 import { ChevronDown } from "lucide-react";
 import FormField from "../common/FormField";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 const EditBid: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get bidId from URL
@@ -343,7 +344,8 @@ const EditBid: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-medium">Items</h3>
                     <p className="text-primary-color font-semibold">
-                      Total Bid: ETB: {calculateTotalBid()}
+                      Total Bid: ETB:{" "}
+                      {formatNumberWithCommas(Number(calculateTotalBid()))}
                     </p>
                   </div>
 
@@ -498,7 +500,10 @@ const EditBid: React.FC = () => {
                                 />
                               </td>
                               <td className="p-2 border">
-                                ETB:{item.totalPrice}
+                                ETB:{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.totalPrice)
+                                )}
                               </td>
                               <td className="p-2 border">
                                 <button
