@@ -24,7 +24,7 @@ const sidebarLinks: SidebarLink[] = [
     activeIcon: "/icons/product-active.svg",
     passiveIcon: "/icons/product-passive.svg",
     label: "Product",
-    href: "/product",
+    href: "/products",
   },
   {
     activeIcon: "/icons/subscribe-active.svg",

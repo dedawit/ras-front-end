@@ -7,6 +7,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { Bid, BidItem } from "../../types/bid";
 import { bidService } from "../../services/bid"; // Adjust path
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 const ViewBid: React.FC = () => {
   const navigate = useNavigate();
@@ -73,12 +74,10 @@ const ViewBid: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-transparent w-full">
-      <div className="fixed top-0 left-0 h-full w-64 hidden md:block">
-        <SidebarSeller />
-      </div>
+    <div className="flex h-screen bg-transparent w-full overflow-x-hidden">
+      <SidebarSeller />
 
-      <div className="flex-1 flex flex-col w-full md:ml-64">
+      <div className="flex-1 flex flex-col w-full ">
         <MobileHeader showSearchIcon={false} />
 
         {/* Notification Display */}
@@ -142,7 +141,8 @@ const ViewBid: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium">Items</h3>
                   <p className="text-primary-color font-semibold">
-                    Total Bid: ETB: {formData.totalPrice || 0}
+                    Total Bid: ETB:{" "}
+                    {formatNumberWithCommas(Number(formData.totalPrice))}
                   </p>
                 </div>
 
@@ -173,7 +173,10 @@ const ViewBid: React.FC = () => {
                               </td>
                               <td className="p-2 border">{item.taxes || 0}</td>
                               <td className="p-2 border">
-                                ETB:{item.totalPrice}
+                                ETB:{" "}
+                                {formatNumberWithCommas(
+                                  Number(item.totalPrice)
+                                )}
                               </td>
                             </tr>
                           )

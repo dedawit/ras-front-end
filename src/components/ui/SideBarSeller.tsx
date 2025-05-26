@@ -58,19 +58,19 @@ const SidebarSeller: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { notification, showNotification, hideNotification } =
-    useNotification(); // Initialize notification hook
+    useNotification();
 
   const handleLogout = async () => {
     try {
       await authService.logout();
-      showNotification("success", "Logout successful!"); // Show success toast
+      showNotification("success", "Logout successful!");
       navigate("/login");
     } catch (error: any) {
       console.error("Logout failed", error);
       showNotification(
         "error",
         error.message || "Logout failed. Please try again."
-      ); // Show error toast
+      );
     }
   };
 
