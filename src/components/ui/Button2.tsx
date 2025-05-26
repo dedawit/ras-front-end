@@ -1,12 +1,12 @@
 import { FC } from "react";
-import "./../../styles/style.css"; // Import your CSS file
+import "./../../styles/style.css";
 
 interface ButtonProps {
-  icon?: string; // Icon source
-  text: string; // Button text
-  onClick?: () => void; // Optional click handler
-  width?: string; // Optional width for flexibility
-  className?: string; // Optional custom className prop
+  icon?: string;
+  text: string;
+  onClick?: () => void;
+  width?: string;
+  className?: string;
   iconClassName?: string;
   textClassName?: string;
 }
@@ -16,7 +16,7 @@ const Button2: FC<ButtonProps> = ({
   text,
   onClick,
   width = "w-auto",
-  className = "", // Default to an empty string
+  className = "",
   iconClassName = "w-6 h-6",
   textClassName = "",
 }) => {

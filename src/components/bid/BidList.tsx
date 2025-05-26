@@ -72,7 +72,7 @@ const BidList: FC<BidListProps> = ({
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Spinner color="border-blue-500" className="h-24 w-24 border-8" />
+        <Spinner />
       </div>
     );
   }

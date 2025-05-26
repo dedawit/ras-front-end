@@ -87,7 +87,7 @@ export const ProductList: React.FC<ProductListProps> = ({
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
         {currentProducts.length > 0 ? (
           currentProducts.map((product) => (
             <ProductCard key={product.id} product={product} />

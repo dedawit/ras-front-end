@@ -14,12 +14,6 @@ const sidebarLinks: SidebarLink[] = [
     href: "/rfqs",
   },
   {
-    activeIcon: "/icons/chat-active.svg",
-    passiveIcon: "/icons/chat-passive.svg",
-    label: "Chat",
-    href: "/chat",
-  },
-  {
     activeIcon: "/icons/transaction-active.svg",
     passiveIcon: "/icons/transaction-passive.svg",
     label: "Transactions",

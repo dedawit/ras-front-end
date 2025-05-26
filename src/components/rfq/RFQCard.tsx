@@ -41,14 +41,14 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
     <div className="bg-white rounded-lg border-color p-4 space-y-4 shadow-sm">
       {/* Title, Purchase Number and Actions */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-        <div className="space-y-1">
+        <div className="flex-1 min-w-[50%] space-y-1">
           <h3 className="sm:text-2xl font-extrabold text:sm">
             {rfq.purchaseNumber}
           </h3>
           <p className="text-sm text-gray-600 sm:text-base">{rfq.title}</p>
         </div>
-        <div className="flex flex-col items-start sm:items-end gap-2">
-          {/* Status Box */}
+        <div className="flex flex-col sm:flex-col items-start sm:items-end gap-2 w-full">
+          {/* Status */}
           <span
             className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
               rfq.state || "opened"
@@ -56,28 +56,30 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
           >
             {rfq.state}
           </span>
-          <div className="actions flex items-center space-x-2">
+
+          {/* Actions */}
+          <div className="actions flex flex-row gap-2 items-center justify-end w-full">
             <Button2
               icon={"icons/eye.svg"}
               text="View"
-              textClassName="sm:block hidden"
-              width="200px"
+              textClassName="hidden sm:block"
+              width="w-full sm:w-[100px]"
               onClick={handleViewClick}
             />
             {rfq.state?.toLowerCase() === "opened" && (
               <Button2
                 icon={"icons/edit.svg"}
                 text="Edit"
-                textClassName="sm:block hidden"
-                width="200px"
+                textClassName="hidden sm:block"
+                width="w-full sm:w-[100px]"
                 onClick={handleEditClick}
               />
             )}
             <Button2
               icon={"icons/quote.svg"}
               text="View Quotes"
-              textClassName="sm:block hidden"
-              width="200px"
+              textClassName="hidden sm:block"
+              width="w-full sm:w-[100px]"
               onClick={handleViewQuote}
             />
           </div>
@@ -115,7 +117,6 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
                 ? (() => {
                     const deadlineDate = new Date(rfq.deadline);
                     const today = new Date();
-                    // Set today to start of day for comparison
                     today.setHours(0, 0, 0, 0);
                     deadlineDate.setHours(0, 0, 0, 0);
                     const timeDiff = deadlineDate.getTime() - today.getTime();
@@ -123,13 +124,11 @@ const RFQCard: FC<RFQCardProps> = ({ rfq }) => {
                       timeDiff / (1000 * 60 * 60 * 24)
                     );
 
-                    // Check if deadline is today or in the future
                     if (new Date(rfq.deadline) >= new Date()) {
                       return daysLeft >= 0
                         ? `${daysLeft} day${daysLeft === 1 ? "" : "s"} left`
                         : "Today";
                     }
-                    // For expired deadlines, show formatted date
                     return new Date(rfq.deadline).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "2-digit",
