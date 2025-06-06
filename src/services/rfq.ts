@@ -214,7 +214,7 @@ export const rfqService = {
       });
     } catch (error) {
       console.error("Error deleting RFQ:", error);
-      throw error;
+      throw handleApiError(error);
     }
   },
 };

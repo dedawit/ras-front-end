@@ -28,6 +28,8 @@ import { ProductDashboard } from "./components/product/ProductDashboard";
 import { ProductForm } from "./components/product/ProductForm";
 import EditProductCard from "./components/product/EditProduct";
 import Landing from "./components/landing/Landing";
+import BuyerReport from "./components/report/BuyerRport";
+import SellerReport from "./components/report/SellerReport";
 
 const App: React.FC = () => {
   return (
@@ -77,6 +79,13 @@ const App: React.FC = () => {
             path="/rfqs/view-quotes/bid/:id"
             element={
               <ProtectedRoute roles={["buyer"]} component={<ViewBidBuyer />} />
+            }
+          />
+
+          <Route
+            path="/report-buyer/:id"
+            element={
+              <ProtectedRoute roles={["buyer"]} component={<BuyerReport />} />
             }
           />
           <Route
@@ -140,6 +149,12 @@ const App: React.FC = () => {
             path="/bids/edit-bid/:id"
             element={
               <ProtectedRoute roles={["seller"]} component={<EditBid />} />
+            }
+          />
+          <Route
+            path="/report-seller/:id"
+            element={
+              <ProtectedRoute roles={["seller"]} component={<SellerReport />} />
             }
           />
 
