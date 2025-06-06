@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import { SidebarLink } from "../../types/side-bar-link";
 import { cn } from "../../lib/utils";
 import Mode from "./Mode";
@@ -8,6 +8,8 @@ import { useUser } from "../../context/UserContext";
 import { authService } from "../../services/auth";
 import { Notification } from "../ui/Notification"; // Import Notification component
 import { useNotification } from "../../hooks/useNotification"; // Import useNotification hook
+
+const userId = localStorage.getItem("userId");
 
 const sidebarLinks: SidebarLink[] = [
   {
@@ -44,7 +46,7 @@ const sidebarLinks: SidebarLink[] = [
     activeIcon: "/icons/report-active.svg",
     passiveIcon: "/icons/report-passive.svg",
     label: "Report",
-    href: "/report",
+    href: userId ? `/report-seller/${userId}` : "/report-seller",
   },
 ];
 
@@ -95,7 +97,7 @@ const SidebarSeller: FC = () => {
       <nav className="space-y-2">
         {sidebarLinks.map((link) => {
           const isActive =
-            location.pathname.startsWith(link.href) ||
+            matchPath({ path: link.href, end: false }, location.pathname) ||
             (location.pathname === "/" && link.href === "/rfq-seller");
           const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 
