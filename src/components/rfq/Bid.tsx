@@ -213,12 +213,10 @@ const BidComponent: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-transparent w-full">
-      <div className="fixed top-0 left-0 h-full w-64 hidden md:block">
-        <SidebarSeller />
-      </div>
+    <div className="flex h-screen bg-transparent w-full overflow-x-hidden">
+      <SidebarSeller />
 
-      <div className="flex-1 flex flex-col w-full md:ml-64">
+      <div className="flex-1 flex flex-col w-full ">
         <MobileHeader showSearchIcon={false} />
 
         {/* Notification Display */}
@@ -311,9 +309,7 @@ const BidComponent: React.FC = () => {
                               onChange={(e) =>
                                 updateItem(index, "unit", e.target.value)
                               }
-                              size={1} // Shows as single-line when closed
-                              // Shows 7 options when opened (calculated as 7 * option height)
-
+                              size={1}
                               onBlur={(e) => {
                                 (e.target as HTMLSelectElement).size = 1;
                                 (e.target as HTMLSelectElement).style.height =
@@ -418,7 +414,7 @@ const BidComponent: React.FC = () => {
                 <button
                   type="button"
                   onClick={addItem}
-                  className="p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="max-w-64 p-3 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300"
                 >
                   Add Item
                 </button>

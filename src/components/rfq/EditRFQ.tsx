@@ -60,8 +60,8 @@ const EditRFQ: React.FC = () => {
               rfqData.category || "Electronics and Electrical Equipment",
             quantity: rfqData.quantity || "",
             detail: rfqData.detail || "",
-            auctionDoc: rfqData.auctionDoc || null, // String URL from backend
-            guidelineDoc: rfqData.guidelineDoc || null, // String URL from backend
+            auctionDoc: rfqData.auctionDoc || null,
+            guidelineDoc: rfqData.guidelineDoc || null,
             deadline,
             state: rfqData.state || "",
           });
@@ -150,7 +150,7 @@ const EditRFQ: React.FC = () => {
       const file = e.target.files ? e.target.files[0] : null;
       setFormData((prev) => ({
         ...prev,
-        [field]: file, // Set to File or null (removing file sets it to null)
+        [field]: file,
       }));
     };
 
@@ -345,7 +345,7 @@ const EditRFQ: React.FC = () => {
                 </FormField>
 
                 <button
-                  className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
+                  className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6 sm:w-[200px]"
                   type="submit"
                   disabled={isLoading}
                 >
