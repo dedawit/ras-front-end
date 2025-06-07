@@ -13,6 +13,7 @@ import { Bid, BidItem } from "../../types/bid";
 import Select from "react-select/base";
 import { SingleValue } from "react-select";
 import { ChevronDown } from "lucide-react";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 const BidComponent: React.FC = () => {
   const { id: userId } = useUser();
@@ -248,7 +249,8 @@ const BidComponent: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-medium">Items</h3>
                   <p className="text-primary-color font-semibold">
-                    Total Bid: ETB: {calculateTotalBid()}
+                    Total Bid: ETB:{" "}
+                    {formatNumberWithCommas(Number(calculateTotalBid()))}
                   </p>
                 </div>
 
@@ -391,7 +393,10 @@ const BidComponent: React.FC = () => {
                               ) => updateItem(index, "taxes", e.target.value)}
                             />
                           </td>
-                          <td className="p-2 border">ETB:{item.totalPrice}</td>
+                          <td className="p-2 border">
+                            ETB:{" "}
+                            {formatNumberWithCommas(Number(item.totalPrice))}
+                          </td>
                           <td className="p-2 border">
                             <button
                               type="button"
