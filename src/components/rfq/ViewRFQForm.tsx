@@ -57,8 +57,9 @@ const ViewRFQ: React.FC = () => {
       case "awarded":
         return {
           text: "Awarded",
-          className: "bg-blue-100 text-blue-800 border-blue-600",
+          className: "bg-yellow-100 text-yellow-800",
         };
+
       default:
         return {
           text: "Unknown",
@@ -260,7 +261,7 @@ const ViewRFQ: React.FC = () => {
                 {/* Back Button */}
                 <button
                   onClick={handleBack}
-                  className="w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-6"
+                  className="sm:w-[200px] p-3 bg-primary-color text-white rounded-md hover:bg-blue-700"
                 >
                   Back to RFQ List
                 </button>
