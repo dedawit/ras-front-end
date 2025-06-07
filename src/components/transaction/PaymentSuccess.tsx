@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 const PaymentSuccessPage: React.FC = () => {
   const navigate = useNavigate();
@@ -48,7 +49,8 @@ const PaymentSuccessPage: React.FC = () => {
               <strong>Transaction ID:</strong> {paymentDetails.transactionId}
             </p>
             <p>
-              <strong>Amount:</strong> {paymentDetails.amount} ETB
+              <strong>Amount:</strong>{" "}
+              {formatNumberWithCommas(Number(paymentDetails.amount))} ETB
             </p>
             <p>
               <strong>Date:</strong>{" "}
@@ -64,9 +66,9 @@ const PaymentSuccessPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
             className="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/")}
           >
-            Back to Dashboard
+            Back to Home
           </button>
           <button
             className="w-full sm:w-auto px-6 py-3 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50"

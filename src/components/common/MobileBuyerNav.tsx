@@ -5,6 +5,9 @@ import UserProfile from "../ui/UserProfile";
 import { cn } from "../../lib/utils";
 import { LogoInside } from "./LogoInside";
 import { useUser } from "../../context/UserContext";
+import { matchPath } from "react-router-dom";
+
+const userId = localStorage.getItem("userId");
 
 const sidebarLinks: SidebarLink[] = [
   {
@@ -23,7 +26,7 @@ const sidebarLinks: SidebarLink[] = [
     activeIcon: "/icons/report-active.svg",
     passiveIcon: "/icons/report-passive.svg",
     label: "Report",
-    href: "/report",
+    href: userId ? `/report-buyer/${userId}` : "/report-buyer",
   },
 ];
 
@@ -66,8 +69,8 @@ const MobileBuyerNav: FC<MobileBuyerNavProps> = ({ onClose }) => {
       <nav className="space-y-2">
         {sidebarLinks.map((link) => {
           const isActive =
-            location.pathname.startsWith(link.href) ||
-            (location.pathname === "/" && link.href === "/rfqs");
+            matchPath({ path: link.href, end: false }, location.pathname) ||
+            (location.pathname === "/" && link.href === "/rfq");
           const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 
           return (

@@ -36,16 +36,33 @@ const BuyerReport: FC = () => {
     fetchData();
   }, [buyerId]);
 
+  const getStatusColorHex = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "opened":
+        return "#22c55e";
+      case "closed":
+        return "#ef4444";
+      case "awarded":
+        return "#facc15";
+      default:
+        return "#9ca3af";
+    }
+  };
+
   const pieData = {
     labels: rfqSummary.map((item) => item.name),
     datasets: [
       {
         data: rfqSummary.map((item) => item.value),
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: rfqSummary.map((item) => getStatusColorHex(item.name)),
+        hoverBackgroundColor: rfqSummary.map((item) =>
+          getStatusColorHex(item.name)
+        ),
       },
     ],
   };
+
+  console.log("pieData", pieData);
 
   return (
     <div className="flex flex-col min-h-screen ">
@@ -57,11 +74,7 @@ const BuyerReport: FC = () => {
             setSearchTerm={setSearchTerm}
             placeholder="Search RFQ..."
           /> */}
-          <MobileHeader
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            placeholder="Search RFQ..."
-          />
+          <MobileHeader showSearchIcon={false} />
           <main className="flex-1 p-4 md:p-6 ">
             {/* <h1 className="text-3xl font-bold mb-4">Buyer Report</h1> */}
 

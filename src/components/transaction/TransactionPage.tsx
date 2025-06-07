@@ -8,6 +8,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { Notification } from "../ui/Notification";
 import { useUser } from "../../context/UserContext";
 import { transactionService } from "../../services/transaction";
+import { formatNumberWithCommas } from "../../utils/formatter";
 
 interface TransactionData {
   transactionId: string;
@@ -128,7 +129,7 @@ const TransactionPage: React.FC = () => {
           />
         )}
 
-        <div className="mt-4 sm:mt-24 md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
+        <div className="sm:mt-20  md:max-w-4xl lg:max-w-5xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full">
           <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
             Transaction Details
           </h2>
@@ -175,9 +176,11 @@ const TransactionPage: React.FC = () => {
                 Total Price
               </label>
               <input
-                type="number"
+                type="text"
                 className="p-2 border rounded-md w-full sm:w-96"
-                value={transactionData.totalPrice}
+                value={formatNumberWithCommas(
+                  Number(transactionData.totalPrice)
+                )}
                 readOnly
               />
             </div>
@@ -194,7 +197,7 @@ const TransactionPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex justify-between mt-6">
+            <div className="flex flex-col sm:flex-row gap-2 sm:justify-between mt-6">
               <button
                 className="p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
                 onClick={() => navigate(-1)}
