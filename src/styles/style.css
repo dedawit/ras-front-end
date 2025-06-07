@@ -129,6 +129,13 @@ body {
   }
 }
 
+/* show report*/
+@media (max-width: 1024px) {
+  .report-responsive {
+    margin-left: 0;
+  }
+}
+
 /* header.css */
 
 /* Hide Category Select on mobile and adjust margin */
