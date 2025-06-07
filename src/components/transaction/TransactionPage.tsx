@@ -197,7 +197,7 @@ const TransactionPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex justify-between mt-6">
+            <div className="flex flex-col sm:flex-row gap-2 sm:justify-between mt-6">
               <button
                 className="p-3 bg-gray-500 text-white rounded-md hover:bg-gray-600"
                 onClick={() => navigate(-1)}

@@ -115,7 +115,7 @@ const ViewTransaction: React.FC = () => {
         )}
 
         {!isLoading && (
-          <div className="mt-4 sm:mt-24 md:max-w-2xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full w-full">
+          <div className="sm:mt-20 md:max-w-2xl mx-auto p-6 bg-transparent rounded-3xl shadow-lg max-w-full w-full">
             <h2 className="text-2xl font-semibold text-center text-primary-color mb-6">
               View Transaction
             </h2>
