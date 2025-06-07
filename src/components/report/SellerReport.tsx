@@ -39,14 +39,27 @@ const SellerReport: FC = () => {
     fetchData();
   }, [sellerId]);
 
+  const getStatusColorHex = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "awarded":
+        return "#facc15";
+      case "rejected":
+        return "#f87171";
+      default:
+        return "#9ca3af";
+    }
+  };
+
   const barData = {
     labels: bidStates.map((item) => item.state),
     datasets: [
       {
         label: "Bid Count",
         data: bidStates.map((item) => item.count),
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: bidStates.map((item) => getStatusColorHex(item.state)),
+        hoverBackgroundColor: bidStates.map((item) =>
+          getStatusColorHex(item.state)
+        ),
       },
     ],
   };

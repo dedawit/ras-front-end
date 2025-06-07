@@ -36,16 +36,33 @@ const BuyerReport: FC = () => {
     fetchData();
   }, [buyerId]);
 
+  const getStatusColorHex = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "opened":
+        return "#22c55e"; // Green-500
+      case "closed":
+        return "#ef4444"; // Red-500
+      case "awarded":
+        return "#facc15"; // Yellow-400
+      default:
+        return "#9ca3af"; // Gray-400
+    }
+  };
+
   const pieData = {
     labels: rfqSummary.map((item) => item.name),
     datasets: [
       {
         data: rfqSummary.map((item) => item.value),
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-        hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        backgroundColor: rfqSummary.map((item) => getStatusColorHex(item.name)),
+        hoverBackgroundColor: rfqSummary.map((item) =>
+          getStatusColorHex(item.name)
+        ),
       },
     ],
   };
+
+  console.log("pieData", pieData);
 
   return (
     <div className="flex flex-col min-h-screen ">
