@@ -39,13 +39,13 @@ const BuyerReport: FC = () => {
   const getStatusColorHex = (status: string) => {
     switch (status.toLowerCase()) {
       case "opened":
-        return "#22c55e"; // Green-500
+        return "#22c55e";
       case "closed":
-        return "#ef4444"; // Red-500
+        return "#ef4444";
       case "awarded":
-        return "#facc15"; // Yellow-400
+        return "#facc15";
       default:
-        return "#9ca3af"; // Gray-400
+        return "#9ca3af";
     }
   };
 
@@ -74,11 +74,7 @@ const BuyerReport: FC = () => {
             setSearchTerm={setSearchTerm}
             placeholder="Search RFQ..."
           /> */}
-          <MobileHeader
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            placeholder="Search RFQ..."
-          />
+          <MobileHeader showSearchIcon={false} />
           <main className="flex-1 p-4 md:p-6 ">
             {/* <h1 className="text-3xl font-bold mb-4">Buyer Report</h1> */}
 

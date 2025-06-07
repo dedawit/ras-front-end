@@ -69,11 +69,7 @@ const SellerReport: FC = () => {
       <div className="flex flex-1 overflow-hidden">
         <SideBarSeller />
         <div className="flex-1 flex flex-col overflow-y-auto custom-scroll">
-          <MobileHeader
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            placeholder="Search Bids..."
-          />
+          <MobileHeader showSearchIcon={false} />
 
           <main className="flex-1 p-4 md:p-6 max-w-full w-full mx-auto overflow-x-hidden">
             {loading ? (

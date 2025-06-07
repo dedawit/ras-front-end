@@ -65,7 +65,7 @@ const MobileHeader: FC<MobileHeaderProps> = ({
         {showSearchIcon && (
           <div className="flex-shrink-0">
             <img
-              src="icons/search.svg"
+              src="/icons/search.svg"
               alt="Search"
               className="w-6 h-6 cursor-pointer"
               onClick={toggleSearch}
