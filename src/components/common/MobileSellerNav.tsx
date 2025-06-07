@@ -5,8 +5,10 @@ import UserProfile from "../ui/UserProfile";
 import { cn } from "../../lib/utils";
 import { LogoInside } from "./LogoInside";
 import { useUser } from "../../context/UserContext";
+import { matchPath } from "react-router-dom";
 
-// Define seller-specific sidebar links
+const userId = localStorage.getItem("userId");
+
 const sidebarLinks: SidebarLink[] = [
   {
     activeIcon: "/icons/rfq-active.svg",
@@ -42,7 +44,7 @@ const sidebarLinks: SidebarLink[] = [
     activeIcon: "/icons/report-active.svg",
     passiveIcon: "/icons/report-passive.svg",
     label: "Report",
-    href: "/report",
+    href: userId ? `/report-seller/${userId}` : "/report-seller",
   },
   // Add more links if needed to test scrolling
 ];
@@ -88,8 +90,8 @@ const MobileSellerNav: FC<MobileSellerNavProps> = ({ onClose }) => {
         <nav className="px-2 py-4 space-y-2">
           {sidebarLinks.map((link) => {
             const isActive =
-              location.pathname.startsWith(link.href) ||
-              (location.pathname === "/" && link.href === "/rfq-seller"); // Adjusted for seller context
+              matchPath({ path: link.href, end: false }, location.pathname) ||
+              (location.pathname === "/" && link.href === "/rfq-seller");
             const iconSrc = isActive ? link.activeIcon : link.passiveIcon;
 
             return (
