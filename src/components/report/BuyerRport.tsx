@@ -67,8 +67,10 @@ const BuyerReport: FC = () => {
   return (
     <div className="flex flex-col min-h-screen ">
       <div className="flex flex-1 ">
-        <Sidebar />
-        <div className="flex-1 flex flex-col overflow-y-auto scrollbar-none space-y-4 custom-scroll max-h-[1200px]">
+        <div className="fixed  md:block hidden">
+          <Sidebar />
+        </div>
+        <div className="report-responsive ml-64 flex-1 flex flex-col overflow-y-auto scrollbar-none space-y-4 custom-scroll max-h-[1200px]">
           {/* <Header
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
