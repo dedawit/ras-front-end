@@ -32,7 +32,7 @@ const ViewBid: React.FC = () => {
 
       setIsLoading(true);
       try {
-        const bidData = await bidService.viewBid(id); // id is guaranteed to be string here
+        const bidData = await bidService.viewBid(id);
         setFormData(bidData);
       } catch (err: any) {
         showNotification(

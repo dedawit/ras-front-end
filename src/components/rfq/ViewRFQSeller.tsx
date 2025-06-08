@@ -10,7 +10,7 @@ import SidebarSeller from "../ui/SideBarSeller";
 
 const ViewRFQSeller: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [rfq, setRfq] = useState<RFQ | null>(null);
+  const [rfq, setRfq] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ViewRFQSeller: React.FC = () => {
       try {
         if (id) {
           const rfqData = await rfqService.viewRFQ(id);
-          console.log(rfqData);
+          // console.log(rfqData);
           setRfq(rfqData);
         } else {
           setError("Invalid RFQ ID");
@@ -84,6 +84,21 @@ const ViewRFQSeller: React.FC = () => {
     } catch (err) {
       setError("Failed to download file");
     }
+  };
+
+  // Check if user has already placed a bid
+  const hasUserBid = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId || !rfq || !rfq.bids) return false;
+    return rfq.bids.some((bid: any) => bid.createdBy.id === userId);
+  };
+
+  // Get the bid ID for the user's bid
+  const getUserBidId = () => {
+    const userId = localStorage.getItem("userId");
+    if (!userId || !rfq || !rfq.bids) return null;
+    const userBid = rfq.bids.find((bid: any) => bid.createdBy.id === userId);
+    return userBid ? userBid.id : null;
   };
 
   return (
@@ -261,17 +276,27 @@ const ViewRFQSeller: React.FC = () => {
 
                 {rfq.state === "opened" && (
                   <button
-                    onClick={() =>
-                      navigate(`/bids/single/${rfq?.id}`, {
-                        state: {
-                          purchaseNumber: rfq.purchaseNumber,
-                          rfqId: rfq.id,
-                        },
-                      })
-                    }
+                    onClick={() => {
+                      if (hasUserBid()) {
+                        const bidId = getUserBidId();
+                        navigate(`/bids/view-bid/${bidId}`, {
+                          state: {
+                            purchaseNumber: rfq.purchaseNumber,
+                            rfqId: rfq.id,
+                          },
+                        });
+                      } else {
+                        navigate(`/bids/single/${rfq?.id}`, {
+                          state: {
+                            purchaseNumber: rfq.purchaseNumber,
+                            rfqId: rfq.id,
+                          },
+                        });
+                      }
+                    }}
                     className="max-w-64 w-full p-3 bg-primary-color text-white rounded-md hover:bg-blue-700 mt-4"
                   >
-                    Bid Now
+                    {hasUserBid() ? "View Bid" : "Bid Now"}
                   </button>
                 )}
               </div>

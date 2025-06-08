@@ -24,6 +24,7 @@ const BidComponent: React.FC = () => {
     purchaseNumber: "Unknown purchaseNumber",
     rfqId: "",
   };
+  console.log("RFQ ID from location state:", rfqId);
 
   const [formData, setFormData] = useState<Bid>({
     rfqId: rfqId || "", // Pre-fill from location state if available
@@ -195,6 +196,7 @@ const BidComponent: React.FC = () => {
           })),
           bidFiles: formData.files instanceof File ? formData.files : null, // Adjusted to match BidData type
         };
+        console.log("Submitting bid with data:", bidData); // Debug
 
         const response = await bidService.createBid(userId, bidData);
         console.log("Bid response:", response);
