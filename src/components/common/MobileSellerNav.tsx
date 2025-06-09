@@ -28,12 +28,12 @@ const sidebarLinks: SidebarLink[] = [
     label: "Product",
     href: "/products",
   },
-  {
-    activeIcon: "/icons/subscribe-active.svg",
-    passiveIcon: "/icons/subscribe-passive.svg",
-    label: "Subscribe",
-    href: "/subscribe",
-  },
+  // {
+  //   activeIcon: "/icons/subscribe-active.svg",
+  //   passiveIcon: "/icons/subscribe-passive.svg",
+  //   label: "Subscribe",
+  //   href: "/subscribe",
+  // },
   {
     activeIcon: "/icons/transaction-active.svg",
     passiveIcon: "/icons/transaction-passive.svg",
