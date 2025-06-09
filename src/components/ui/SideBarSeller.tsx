@@ -6,8 +6,8 @@ import Mode from "./Mode";
 import UserProfile from "./UserProfile";
 import { useUser } from "../../context/UserContext";
 import { authService } from "../../services/auth";
-import { Notification } from "../ui/Notification"; // Import Notification component
-import { useNotification } from "../../hooks/useNotification"; // Import useNotification hook
+import { Notification } from "../ui/Notification";
+import { useNotification } from "../../hooks/useNotification";
 
 const userId = localStorage.getItem("userId");
 

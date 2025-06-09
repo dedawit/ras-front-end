@@ -5,7 +5,10 @@ import UserProfile from "../ui/UserProfile";
 import { cn } from "../../lib/utils";
 import { LogoInside } from "./LogoInside";
 import { useUser } from "../../context/UserContext";
-import { matchPath } from "react-router-dom";
+import { matchPath, useNavigate } from "react-router-dom";
+import { authService } from "../../services/auth";
+import { Notification } from "../ui/Notification";
+import { useNotification } from "../../hooks/useNotification";
 
 const userId = localStorage.getItem("userId");
 
@@ -60,6 +63,23 @@ interface MobileSellerNavProps {
 
 const MobileSellerNav: FC<MobileSellerNavProps> = ({ onClose }) => {
   const { fullName } = useUser();
+  const navigate = useNavigate();
+  const { notification, showNotification, hideNotification } =
+    useNotification();
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      showNotification("success", "Logout successful!");
+      navigate("/login");
+    } catch (error: any) {
+      console.error("Logout failed", error);
+      showNotification(
+        "error",
+        error.message || "Logout failed. Please try again."
+      );
+    }
+  };
 
   return (
     <div className="mobile-header relative h-screen bg-brand flex flex-col">
@@ -135,7 +155,10 @@ const MobileSellerNav: FC<MobileSellerNavProps> = ({ onClose }) => {
               avatar: mockUser.avatar || "/place_holder/default-avatar.jpg",
             }}
           />
-          <button className="rounded-md mx-2 px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold">
+          <button
+            className="rounded-md mx-2 px-4 py-2 text-white bg-logout-color hover:bg-opacity-80 font-bold"
+            onClick={handleLogout}
+          >
             Logout
           </button>
         </div>
