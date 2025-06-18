@@ -68,6 +68,7 @@ const TransactionBuyerList: FC<TransactionListProps> = ({
   const filteredTransactions = transactions.filter((transaction) =>
     transaction.transactionId.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  console.log("Filtered Transactions:", filteredTransactions);
 
   // Pagination logic
   const totalItems = filteredTransactions.length;
@@ -98,7 +99,7 @@ const TransactionBuyerList: FC<TransactionListProps> = ({
         {currentTransactions.length > 0 ? (
           currentTransactions.map((transaction) => (
             <TransactionCardBuyer
-              key={transaction.transactionId}
+              key={transaction.id}
               transaction={transaction}
             />
           ))
