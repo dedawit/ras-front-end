@@ -131,7 +131,7 @@ export const productService = {
   async getPublicProducts(): Promise<Product[]> {
     try {
       const response = await axios.get("/product/view-all-public");
-      console.log("Fetched public products:", response.data);
+      // console.log("Fetched public products:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching public products:", error);
